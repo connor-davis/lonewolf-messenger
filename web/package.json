@@ -1,0 +1,19 @@
+{
+  "name": "lonewolf-messenger",
+  "version": "0.0.0",
+  "description": "LoneWolf Messenger is built to be a decentralized messaging application that enables users to be in control of their data and only share it with people they trust.",
+  "scripts": {
+    "start": "vite",
+    "dev": "vite",
+    "build": "vite build",
+    "serve": "vite preview"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "vite": "^2.5.7",
+    "vite-plugin-solid": "^2.0.3"
+  },
+  "dependencies": {
+    "solid-js": "^1.1.3"
+  }
+}
