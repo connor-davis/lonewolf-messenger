@@ -49,7 +49,7 @@ let LoginCard = ({ showRegister }) => {
       <div class="flex flex-col w-full h-auto space-y-2">
         <input
           type="text"
-          placeholder="Your username/email"
+          placeholder="Your username"
           value={email()}
           onChange={(event) => setEmail(event.target.value)}
           class="w-full h-auto p-3 bg-gray-200 dark:bg-gray-700 rounded-md text-gray-900 dark:text-white outline-none"

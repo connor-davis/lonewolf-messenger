@@ -28,58 +28,67 @@ module.exports = {
       },
       transitionProperty: {
         width: 'width',
-        height: 'height'
+        height: 'height',
       },
       keyframes: {
         'fade-in-down': {
           '0%': {
             opacity: '0',
-            transform: 'translateY(-20px)'
+            transform: 'translateY(-20px)',
           },
           '100%': {
             opacity: '1',
-            transform: 'translateY(0)'
+            transform: 'translateY(0)',
           },
         },
         'fade-out-down': {
-          'from': {
+          from: {
             opacity: '1',
-            transform: 'translateY(0px)'
+            transform: 'translateY(0px)',
           },
-          'to': {
+          to: {
             opacity: '0',
-            transform: 'translateY(10px)'
+            transform: 'translateY(10px)',
           },
         },
         'fade-in-up': {
           '0%': {
             opacity: '0',
-            transform: 'translateY(10px)'
+            transform: 'translateY(10px)',
           },
           '100%': {
             opacity: '1',
-            transform: 'translateY(0)'
+            transform: 'translateY(0)',
           },
         },
         'fade-out-up': {
-          'from': {
+          from: {
             opacity: '1',
-            transform: 'translateY(0px)'
+            transform: 'translateY(0px)',
           },
-          'to': {
+          to: {
             opacity: '0',
-            transform: 'translateY(-20px)'
+            transform: 'translateY(-20px)',
           },
-        }
+        },
+        'fade-in': {
+          '0%': {
+            opacity: '0',
+          },
+          '100%': {
+            opacity: '1',
+          },
+        },
       },
       animation: {
         'fade-in-down': 'fade-in-down 0.5s ease-out',
         'fade-out-down': 'fade-out-down 0.5s ease-out',
         'fade-in-up': 'fade-in-up 0.5s ease-out',
-        'fade-out-up': 'fade-out-up 0.5s ease-out'
-      }
+        'fade-out-up': 'fade-out-up 0.5s ease-out',
+        'fade-in': 'fade-in 0.5s ease-in-out'
+      },
     },
   },
   variants: {},
-  plugins: []
+  plugins: [],
 };

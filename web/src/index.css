@@ -1,3 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+div[placeholder]:empty:before {
+    content: attr(placeholder);
+    color: #A3A3A3;
+}
