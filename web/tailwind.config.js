@@ -29,6 +29,10 @@ module.exports = {
       transitionProperty: {
         width: 'width',
         height: 'height',
+        padding: 'padding',
+        wp: 'width, padding',
+        border: 'border-color',
+        radius: 'border-radius'
       },
       keyframes: {
         'fade-in-down': {
@@ -85,7 +89,7 @@ module.exports = {
         'fade-out-down': 'fade-out-down 0.5s ease-out',
         'fade-in-up': 'fade-in-up 0.5s ease-out',
         'fade-out-up': 'fade-out-up 0.5s ease-out',
-        'fade-in': 'fade-in 0.5s ease-in-out'
+        'fade-in': 'fade-in 0.5s ease-in-out',
       },
     },
   },

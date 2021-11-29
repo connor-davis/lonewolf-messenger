@@ -3,6 +3,42 @@
 @tailwind utilities;
 
 div[placeholder]:empty:before {
-    content: attr(placeholder);
-    color: #A3A3A3;
+  content: attr(placeholder);
+  color: #a3a3a3;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+  cursor: pointer;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: transparent;
+  cursor: pointer;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #a3a3a3;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #adadad;
+}
+
+/* Handle */
+.dark ::-webkit-scrollbar-thumb {
+  background: #111111;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* Handle on hover */
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: rgb(46, 46, 46);
 }

@@ -1,9 +1,10 @@
 import { authentication, certificates, user } from 'lonewolf-protocol';
-import { Route, Router, Routes } from 'solid-app-router';
+import { Route, Routes } from 'solid-app-router';
 import { createSignal, onMount } from 'solid-js';
 import LogoutButton from './components/buttons/logout';
 import SettingsButton from './components/buttons/settings';
 import Content from './components/content/content';
+import AddFriendModal from './components/modals/addFriend';
 import Navbar from './components/navbar/navbar';
 import NavbarContent from './components/navbar/navbarContent';
 import NavbarHeader from './components/navbar/navbarHeader';
@@ -12,8 +13,15 @@ import Sidebar from './components/sidebar/sidebar';
 import SidebarContent from './components/sidebar/sidebarContent';
 import SidebarFooter from './components/sidebar/sidebarFooter';
 import SidebarHeader from './components/sidebar/sidebarHeader';
+import Tabs from './components/tabs/tabs';
+import useModals from './hooks/models';
+import useUserSettings from './hooks/userSettings';
 import AuthenticationPage from './pages/authentication/authentication';
 import ProfilePage from './pages/profile/profile';
+import AppearanceSettingsPage from './pages/settings/appearanceSettings';
+import SettingsPage from './pages/settings/settings';
+import ChatsTabPage from './pages/tabs/chatsTab';
+import FriendsTabPage from './pages/tabs/friendsTab';
 import WelcomePage from './pages/welcome/welcome';
 import LoadingProvider from './providers/loadingProvider';
 import NotificationProvider from './providers/notificationProvider';
@@ -24,12 +32,24 @@ function App() {
   let [loadingMessage, setLoadingMessage] = createSignal(undefined);
   let [isLoading, setIsLoading] = createSignal(true);
 
+  let [settings, setSettings, loadSettings] = useUserSettings();
+
+  let [modals, editModals] = useModals();
+
   onMount(() => {
     setLoadingMessage('Loading the application.');
 
-    authentication.checkAuth();
-
     authentication.isAuthenticated.subscribe((value) => {
+      if (value) {
+        setIsLoading(true);
+
+        setLoadingMessage('Loading Settings');
+
+        loadSettings(() => setTimeout(() => setIsLoading(false), 500));
+      } else {
+        setIsLoading(false);
+      }
+
       setIsAuthenticated(value);
 
       if (user.is) {
@@ -45,9 +65,9 @@ function App() {
     setTimeout(() => {
       setLoadingMessage('Checking authentication status.');
 
-      setTimeout(() => {
-        setIsLoading(false);
+      authentication.checkAuth();
 
+      setTimeout(() => {
         if (user.is) {
           certificates.generateFriendRequestsCertificate(
             ({ errMessage, success }) => {
@@ -61,56 +81,82 @@ function App() {
   });
 
   return (
-    <Router>
-      <div class="dark">
-        <div class="w-screen h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white select-none outline-none">
-          <NotificationProvider />
+    <div class={settings.theme}>
+      {modals.addFriend && (
+        <AddFriendModal onClose={() => editModals({ addFriend: false })} />
+      )}
 
-          <LoadingProvider message={loadingMessage} busy={isLoading}>
-            {isAuthenticated() && (
-              <div class="flex flex-col md:flex-row w-full h-full">
-                <Sidebar>
-                  <SidebarHeader title="LoneWolf" subtitle="Chats" />
-                  <SidebarContent></SidebarContent>
-                  <SidebarFooter
-                    start={() => <MiniProfile />}
-                    end={() => (
-                      <div class="flex space-x-3">
-                        <SettingsButton />
-                        <LogoutButton />
-                      </div>
-                    )}
+      <div class="z-10 w-screen h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white select-none outline-none">
+        <NotificationProvider />
+
+        <LoadingProvider message={loadingMessage} busy={isLoading}>
+          {isAuthenticated() && (
+            <div class="flex flex-col md:flex-row w-full h-full">
+              <Sidebar>
+                <SidebarHeader title="LoneWolf" />
+                <SidebarContent>
+                  <Tabs
+                    tabs={[
+                      {
+                        label: 'Chats',
+                        content: <ChatsTabPage />,
+                      },
+                      {
+                        label: 'Friends',
+                        content: <FriendsTabPage />,
+                      },
+                    ]}
                   />
-                </Sidebar>
-
-                <Navbar>
-                  <NavbarHeader title="LoneWolf" />
-                  <NavbarContent>
-                    <div class="flex justify-between">
-                      <MiniProfile />
-
-                      <div class="flex space-x-3">
-                        <SettingsButton />
-                        <LogoutButton />
-                      </div>
+                </SidebarContent>
+                <SidebarFooter
+                  start={() => <MiniProfile />}
+                  end={() => (
+                    <div class="flex space-x-3">
+                      <SettingsButton />
+                      <LogoutButton />
                     </div>
-                  </NavbarContent>
-                </Navbar>
+                  )}
+                />
+              </Sidebar>
 
-                <Content>
-                  <Routes>
-                    <Route path="/" element={<WelcomePage />} />
+              <Navbar>
+                <NavbarHeader title="LoneWolf" />
+                <NavbarContent>
+                  <div class="flex justify-between">
+                    <MiniProfile />
+
+                    <div class="flex space-x-3">
+                      <SettingsButton />
+                      <LogoutButton />
+                    </div>
+                  </div>
+                </NavbarContent>
+              </Navbar>
+
+              <Content>
+                <Routes>
+                  <Route path="/" element={<WelcomePage />} />
+                  <Route
+                    path="/profile"
+                    element={<ProfilePage backEnabled={true} />}
+                  />
+                  <Route path="/settings" element={<SettingsPage />}>
+                    <Route path="/" element={<ProfilePage />} />
                     <Route path="/profile" element={<ProfilePage />} />
-                  </Routes>
-                </Content>
-              </div>
-            )}
+                    <Route
+                      path="/appearance"
+                      element={<AppearanceSettingsPage />}
+                    />
+                  </Route>
+                </Routes>
+              </Content>
+            </div>
+          )}
 
-            {!isAuthenticated() && <AuthenticationPage />}
-          </LoadingProvider>
-        </div>
+          {!isAuthenticated() && <AuthenticationPage />}
+        </LoadingProvider>
       </div>
-    </Router>
+    </div>
   );
 }
 

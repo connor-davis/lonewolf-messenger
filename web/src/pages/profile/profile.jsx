@@ -1,13 +1,13 @@
 import { gunAvatar } from 'gun-avatar';
 import { gun } from 'lonewolf-protocol';
 import { useNavigate } from 'solid-app-router';
-import { createSignal, onMount } from 'solid-js';
+import { onMount } from 'solid-js';
 import { createStore } from 'solid-js/store';
 import BackButton from '../../components/buttons/back';
 import Header from '../../components/header/header';
 import useUserInfo from '../../hooks/userInfo';
 
-let ProfilePage = () => {
+let ProfilePage = ({ backEnabled = false }) => {
   let navigate = useNavigate();
 
   let [state, setState] = createStore(
@@ -44,7 +44,7 @@ let ProfilePage = () => {
     <div class="flex flex-col w-full h-full animate-fade-in">
       <Header
         title="Profile"
-        start={() => <BackButton onClick={() => navigate('/')} />}
+        start={() => backEnabled && <BackButton onClick={() => navigate('/')} />}
       />
 
       <div class="flex flex-col lg:flex-row w-full h-full p-3 lg:px-10 space-y-4 lg:space-y-0 space-x-0 lg:space-x-4 overflow-y-auto">

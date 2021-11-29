@@ -1,8 +1,12 @@
+import { useNavigate } from 'solid-app-router';
+
 let SettingsButton = () => {
+  let navigate = useNavigate();
+
   return (
     <div
       class="flex justify-center items-center cursor-pointer hover:text-gray-400"
-      onClick={() => {}}
+      onClick={() => navigate('/settings')}
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
