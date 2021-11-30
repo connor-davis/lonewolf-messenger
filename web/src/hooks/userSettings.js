@@ -45,10 +45,16 @@ let useUserSettings = () => {
     return gun
       .user()
       .get('settings')
-      .on((data, _) => {
-        setUserSettings('theme', () => data.theme);
+      .once((data, _) => {
+        if (data) {
+          setUserSettings('theme', () => data.theme);
 
-        callback();
+          callback();
+        } else {
+          setUserSettings('theme', () => 'light');
+
+          callback();
+        }
       });
   };
 

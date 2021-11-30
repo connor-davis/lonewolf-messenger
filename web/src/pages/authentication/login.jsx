@@ -65,7 +65,7 @@ let LoginCard = ({ showRegister }) => {
 
       <div class="flex flex-col justify-center items-center w-full h-auto space-y-2">
         <div
-          class="flex w-auto h-auto px-4 py-2 bg-blue-600 rounded-md cursor-pointer"
+          class="flex w-auto h-auto px-4 py-2 bg-blue-600 rounded-md cursor-pointer text-white"
           onClick={() => login()}
         >
           Login
