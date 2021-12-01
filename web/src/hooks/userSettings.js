@@ -14,8 +14,6 @@ let useUserSettings = () => {
           setUserSettings('theme', () => data.theme);
         });
 
-    authentication.checkAuth();
-
     authentication.isAuthenticated.subscribe((value) => {
       if (value)
         return gun

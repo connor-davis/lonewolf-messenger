@@ -15,8 +15,6 @@ let useUserInfo = () => {
           setUserInfo('about', () => data.about);
         });
 
-    authentication.checkAuth();
-
     authentication.isAuthenticated.subscribe((value) => {
       if (value)
         return gun
