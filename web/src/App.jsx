@@ -52,7 +52,7 @@ function App() {
 
       setIsAuthenticated(value);
 
-      if (user.is) {
+      if (user.is && value) {
         certificates.generateFriendRequestsCertificate(
           ({ errMessage, success }) => {
             if (errMessage) return console.log(errMessage);
@@ -66,17 +66,6 @@ function App() {
       setLoadingMessage('Checking authentication status.');
 
       authentication.checkAuth();
-
-      setTimeout(() => {
-        if (user.is) {
-          certificates.generateFriendRequestsCertificate(
-            ({ errMessage, success }) => {
-              if (errMessage) return console.log(errMessage);
-              else return console.log(success);
-            }
-          );
-        }
-      }, 500);
     }, 1000);
   });
 

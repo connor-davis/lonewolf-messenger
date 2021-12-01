@@ -1,5 +1,5 @@
 import { gunAvatar } from 'gun-avatar';
-import { gun } from 'lonewolf-protocol';
+import { friends, gun } from 'lonewolf-protocol';
 import { createSignal } from 'solid-js';
 import { createStore } from 'solid-js/store';
 import CloseButton from '../buttons/close';
@@ -16,12 +16,17 @@ let AddFriendModal = ({ onClose = () => {} }) => {
         for (let key in data) {
           if (key.startsWith('~')) {
             gun.get(key).once((user) => {
-              gun.get(user.info['#']).once((info) => {
+              if (user.info) {
+                gun.get(user.info['#']).once((info) => {
+                  setSearchResult('pub', user.pub);
+                  setSearchResult('alias', user.alias);
+                  setSearchResult('displayName', info.displayName);
+                  setSearchResult('about', info.about);
+                });
+              } else {
                 setSearchResult('pub', user.pub);
                 setSearchResult('alias', user.alias);
-                setSearchResult('displayName', info.displayName);
-                setSearchResult('about', info.about);
-              });
+              }
             });
           }
         }
@@ -29,10 +34,15 @@ let AddFriendModal = ({ onClose = () => {} }) => {
     } else {
       gun.get(`~${searchTerm}`).once((user) => {
         gun.get(user.info['#']).once((info) => {
-          setSearchResult('pub', user.pub);
-          setSearchResult('alias', user.alias);
-          setSearchResult('displayName', info.displayName);
-          setSearchResult('about', info.about);
+          if (user.info) {
+            setSearchResult('pub', user.pub);
+            setSearchResult('alias', user.alias);
+            setSearchResult('displayName', info.displayName);
+            setSearchResult('about', info.about);
+          } else {
+            setSearchResult('pub', user.pub);
+            setSearchResult('alias', user.alias);
+          }
         });
       });
     }
@@ -93,7 +103,18 @@ let AddFriendModal = ({ onClose = () => {} }) => {
 
             <div
               class="flex w-full h-auto justify-center items-center px-3 py-2 bg-blue-600 text-white uppercase rounded-md cursor-pointer"
-              onClick={() => {}}
+              onClick={() =>
+                friends.addFriendRequest(
+                  searchResult.pub,
+                  ({ errMessage, success }) => {
+                    if (errMessage) return console.log(errMessage);
+                    else {
+                      onClose();
+                      return console.log(success);
+                    }
+                  }
+                )
+              }
             >
               Send Friend Request
             </div>
