@@ -8,8 +8,8 @@ Welcome to LoneWolf Messenger. LoneWolf Messenger is built to be decentralized a
 - [x] Profile Management
 - [x] Appearance Settings
 - [x] Friend Requests
-    - [] Accept Friend Request
-    - [] Reject Friend Request
+    - [x] Accept Friend Request
+    - [x] Reject Friend Request
 - [] Friend List
 - [] Chat Creation
 - [] Chat List
