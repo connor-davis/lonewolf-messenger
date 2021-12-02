@@ -6,11 +6,12 @@ let useFriendRequests = () => {
   let [state, setState] = createStore([]);
 
   onMount(() => {
-    friends.loadFriendRequests();
-
     friends.friendRequests.subscribe((request) => {
       setState([
-        ...state.filter((current) => current.pub !== request.pub),
+        ...state.filter(
+          (current) =>
+           request && request.pub !== undefined && current.pub !== request.pub
+        ),
         request,
       ]);
     });
