@@ -58,7 +58,6 @@ let ProfilePage = ({ backEnabled = false }) => {
               Feature coming soon...
             </div>
           </div>
-          {/* <div class="flex flex-col space-y-3">Profile Color</div> */}
           <div class="flex flex-col space-y-3">
             <div class="uppercase text-gray-400 dark:text-gray-300">
               Display Name
