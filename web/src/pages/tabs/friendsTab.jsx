@@ -1,5 +1,5 @@
 import { gunAvatar } from 'gun-avatar';
-import { friends } from 'lonewolf-protocol';
+import { friends, messaging } from 'lonewolf-protocol';
 import AddFriendButton from '../../components/buttons/addFriend';
 import CrossButton from '../../components/buttons/cross';
 import FloatingButtonBottomRight from '../../components/buttons/floating';
@@ -113,7 +113,18 @@ let FriendsTabPage = () => {
                   </div>
 
                   <div class="flex space-x-2">
-                    <div class="flex flex-col justify-center items-center p-2 border-l border-t border-r border-b border-gray-300 dark:border-gray-800 hover:text-gray-400 cursor-pointer rounded-full">
+                    <div
+                      class="flex flex-col justify-center items-center p-2 border-l border-t border-r border-b border-gray-300 dark:border-gray-800 hover:text-gray-400 cursor-pointer rounded-full"
+                      onClick={() => {
+                        messaging.createChat(
+                          friend.pub,
+                          ({ errMessage, success }) => {
+                            if (errMessage) return console.log(errMessage);
+                            else return console.log(success);
+                          }
+                        );
+                      }}
+                    >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         class="h-5 w-5"

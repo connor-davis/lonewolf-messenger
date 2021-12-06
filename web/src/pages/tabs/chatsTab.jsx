@@ -1,14 +1,43 @@
-import AddChatButton from '../../components/buttons/addChat';
-import FloatingButtonBottomRight from '../../components/buttons/floating';
+import { gunAvatar } from 'gun-avatar';
+import useChatsList from '../../hooks/chatsList';
 
 let ChatsTabPage = () => {
+  let chatsList = useChatsList();
+
   return (
     <div class="relative flex flex-col w-full h-full p-2 overflow-y-auto overflow-x-hidden space-y-2">
-      <div class="flex items-center p-2 transition-radius duration-100 ease hover:bg-gray-200 dark:hover:bg-gray-700 hover:rounded-md cursor-pointer border-b border-gray-200 dark:border-gray-800">
-        <div class="flex w-10 h-10 rounded-full bg-gray-300 dark:bg-gray-600 cursor-pointer"></div>
-      </div>
+      {chatsList.filter((chat) => chat.pub !== undefined).length > 0 && (
+        <div class="flex flex-col w-full h-auto max-h-64 overflow-y-auto space-y-2">
+          {chatsList.map((chat) => {
+            return (
+              <div
+                key={chat.key}
+                class="flex justify-between items-center p-2 transition-radius duration-100 ease space-x-2 hover:bg-gray-200 dark:hover:bg-gray-700 hover:rounded-md border-b border-gray-200 dark:border-gray-800 cursor-pointer"
+              >
+                <div class="flex w-auto h-full space-x-2">
+                  <img
+                    src={gunAvatar(chat.pub, 40)}
+                    class="flex w-auto h-auto rounded-full bg-gray-300 dark:bg-gray-600"
+                  />
 
-      <FloatingButtonBottomRight content={<AddChatButton />} />
+                  <div class="flex flex-col justify-center w-auto h-full">
+                    <div class="flex justify-between items-center w-full h-auto">
+                      <div class="text-sm text-gray-900 dark:text-white overflow-ellipsis">
+                        {chat.displayName}
+                      </div>
+                    </div>
+                    <div class="text-xs text-gray-400 overflow-ellipsis">
+                      @{chat.alias}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
+
+      {/* <FloatingButtonBottomRight content={<AddChatButton />} /> */}
     </div>
   );
 };
