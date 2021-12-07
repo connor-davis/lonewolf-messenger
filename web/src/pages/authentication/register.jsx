@@ -6,7 +6,7 @@ let RegisterCard = ({ showLogin }) => {
   let [success, setSuccess] = createSignal('');
   let [error, setError] = createSignal('');
 
-  let [email, setEmail] = createSignal('');
+  let [username, setUsername] = createSignal('');
   let [password, setPassword] = createSignal('');
   let [confirmPassword, setConfirmPassword] = createSignal('');
 
@@ -17,7 +17,7 @@ let RegisterCard = ({ showLogin }) => {
       );
     else {
       await authentication.registerUser(
-        { email: email(), password: password() },
+        { username: username(), password: password() },
         async ({ errMessage, success }) => {
           if (errMessage) return setError(errMessage) && setSuccess('');
           else {
@@ -25,7 +25,7 @@ let RegisterCard = ({ showLogin }) => {
             setSuccess(success);
 
             return await authentication.loginUser(
-              { email: email(), password: password() },
+              { username: username(), password: password() },
               ({ errMessage, success }) => {
                 if (errMessage) return setError(errMessage) && setSuccess('');
                 else return setError('') && setSuccess(success);
@@ -67,8 +67,8 @@ let RegisterCard = ({ showLogin }) => {
         <input
           type="text"
           placeholder="Your username"
-          value={email()}
-          onChange={(event) => setEmail(event.target.value)}
+          value={username()}
+          onChange={(event) => setUsername(event.target.value)}
           class="w-full h-auto p-3 bg-gray-200 dark:bg-gray-700 rounded-md text-gray-900 dark:text-white outline-none"
         />
         <input

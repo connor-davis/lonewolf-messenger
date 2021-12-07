@@ -11,7 +11,7 @@ let useUserSettings = () => {
         .user()
         .get('settings')
         .on((data, _) => {
-          setUserSettings('theme', () => data.theme);
+          setUserSettings('theme', () => data.theme || "light");
         });
 
     authentication.isAuthenticated.subscribe((value) => {
