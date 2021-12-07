@@ -10,9 +10,9 @@ Welcome to LoneWolf Messenger. LoneWolf Messenger is built to be decentralized a
 - [x] Friend Requests
     - [x] Accept Friend Request
     - [x] Reject Friend Request
-- [ ] Friend List
-- [ ] Chat Creation
-- [ ] Chat List
+- [x] Friend List
+- [x] Chat Creation
+- [x] Chat List
 - [ ] Messaging
 - [ ] End-To-End Messaging
 - [ ] Group Messaging
