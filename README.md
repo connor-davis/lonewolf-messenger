@@ -13,6 +13,6 @@ Welcome to LoneWolf Messenger. LoneWolf Messenger is built to be decentralized a
 - [x] Friend List
 - [x] Chat Creation
 - [x] Chat List
-- [ ] Messaging
+- [x] Messaging
 - [ ] End-To-End Messaging
 - [ ] Group Messaging
