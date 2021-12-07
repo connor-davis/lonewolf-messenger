@@ -18,6 +18,7 @@ import useFriendsList from './hooks/friendsList';
 import useModals from './hooks/models';
 import useUserSettings from './hooks/userSettings';
 import AuthenticationPage from './pages/authentication/authentication';
+import ChatPage from './pages/chat/chat';
 import ProfilePage from './pages/profile/profile';
 import AppearanceSettingsPage from './pages/settings/appearanceSettings';
 import SettingsPage from './pages/settings/settings';
@@ -147,6 +148,7 @@ function App() {
               <Content>
                 <Routes>
                   <Route path="/" element={<WelcomePage />} />
+                  <Route path="/chat/:roomId/:pub" element={<ChatPage />} />
                   <Route
                     path="/profile"
                     element={<ProfilePage backEnabled={true} />}

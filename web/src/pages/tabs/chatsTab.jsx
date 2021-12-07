@@ -1,7 +1,10 @@
 import { gunAvatar } from 'gun-avatar';
+import { useNavigate } from 'solid-app-router';
 import useChatsList from '../../hooks/chatsList';
 
 let ChatsTabPage = () => {
+  let navigate = useNavigate();
+
   let chatsList = useChatsList();
 
   return (
@@ -11,8 +14,12 @@ let ChatsTabPage = () => {
           {chatsList.map((chat) => {
             return (
               <div
-                key={chat.key}
+                key={chat.roomId}
                 class="flex justify-between items-center p-2 transition-radius duration-100 ease space-x-2 hover:bg-gray-200 dark:hover:bg-gray-700 hover:rounded-md border-b border-gray-200 dark:border-gray-800 cursor-pointer"
+                onClick={() => {
+                  navigate('/');
+                  navigate('/chat/' + chat.roomId + '/' + chat.pub);
+                }}
               >
                 <div class="flex w-auto h-full space-x-2">
                   <img
