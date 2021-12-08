@@ -1,0 +1,13 @@
+[debug] [2021-12-08T09:59:02.964Z] ----------------------------------------------------------------------
+[debug] [2021-12-08T09:59:02.966Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\Connor\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy
+[debug] [2021-12-08T09:59:02.967Z] CLI Version:   9.18.0
+[debug] [2021-12-08T09:59:02.967Z] Platform:      win32
+[debug] [2021-12-08T09:59:02.967Z] Node Version:  v16.9.1
+[debug] [2021-12-08T09:59:02.968Z] Time:          Wed Dec 08 2021 11:59:02 GMT+0200 (South Africa Standard Time)
+[debug] [2021-12-08T09:59:02.968Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2021-12-08T09:59:03.050Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2021-12-08T09:59:03.051Z] > authorizing via signed-in user (connordvs@protonmail.com)
+[debug] [2021-12-08T09:59:03.051Z] [iam] checking project lonewolf-web for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2021-12-08T09:59:03.054Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/lonewolf-web:testIamPermissions  
+ {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
