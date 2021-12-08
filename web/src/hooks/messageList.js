@@ -1,4 +1,4 @@
-import { gun, messaging } from 'lonewolf-protocol';
+import { messaging } from 'lonewolf-protocol';
 import { onMount } from 'solid-js';
 import { createStore } from 'solid-js/store';
 
@@ -6,25 +6,43 @@ let useMessageList = (roomId, pub) => {
   let [state, setState] = createStore([]);
 
   onMount(async () => {
-    messaging.messageList(roomId, pub).subscribe((messages) => {
-      if (state.length === 0) {
+    messaging.messageList(roomId, pub).subscribe(({ initial, individual }) => {
+      if (initial) {
         let messagesDiv = document.querySelector('#messages');
 
         if (messagesDiv) {
-          let elementHeight = messagesDiv.scrollHeight;
-          messagesDiv.scrollTop = elementHeight;
+          messagesDiv.scrollTop =
+            messagesDiv.scrollHeight - messagesDiv.clientHeight;
         }
+
+        setState(
+          initial.sort((a, b) => {
+            if (a.timeSent > b.timeSent) return 1;
+            if (a.timeSent < b.timeSent) return -1;
+            return 0;
+          })
+        );
+
+        scroll();
+
+        return;
       }
 
-      setState(
-        messages.sort((a, b) => {
-          if (a.timeSent > b.timeSent) return 1;
-          if (a.timeSent < b.timeSent) return -1;
-          return 0;
-        })
-      );
+      if (individual) {
+        if (!state.includes(individual)) {
+          setState(
+            [...state, individual].sort((a, b) => {
+              if (a.timeSent > b.timeSent) return 1;
+              if (a.timeSent < b.timeSent) return -1;
+              return 0;
+            })
+          );
 
-      scroll();
+          scroll();
+        }
+
+        return;
+      }
     });
   });
 
