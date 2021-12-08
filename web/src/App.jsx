@@ -63,25 +63,6 @@ function App() {
             else return console.log(success);
           }
         );
-
-        let friendsPublicKeys = friendsList
-          .filter((friend) => friend !== undefined)
-          .map((friend) => friend.pub);
-
-        certificates.createChatsCertificate(
-          friendsPublicKeys,
-          ({ errMessage, success }) => {
-            if (errMessage) return console.log(errMessage);
-            else return console.log(success);
-          }
-        );
-        certificates.createMessagesCertificate(
-          friendsPublicKeys,
-          ({ errMessage, success }) => {
-            if (errMessage) return console.log(errMessage);
-            else return console.log(success);
-          }
-        );
       }
     });
 

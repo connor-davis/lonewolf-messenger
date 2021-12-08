@@ -10,7 +10,7 @@ let ChatsTabPage = () => {
   return (
     <div class="relative flex flex-col w-full h-full p-2 overflow-y-auto overflow-x-hidden space-y-2">
       {chatsList.filter((chat) => chat.pub !== undefined).length > 0 && (
-        <div class="flex flex-col w-full h-auto max-h-64 overflow-y-auto space-y-2">
+        <div class="flex flex-col w-full h-full overflow-y-auto space-y-2">
           {chatsList.map((chat) => {
             return (
               <div

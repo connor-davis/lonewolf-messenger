@@ -1,5 +1,6 @@
 import { gunAvatar } from 'gun-avatar';
 import { friends, messaging } from 'lonewolf-protocol';
+import { useNavigate } from 'solid-app-router';
 import AddFriendButton from '../../components/buttons/addFriend';
 import CrossButton from '../../components/buttons/cross';
 import FloatingButtonBottomRight from '../../components/buttons/floating';
@@ -9,6 +10,8 @@ import useFriendsList from '../../hooks/friendsList';
 import useModals from '../../hooks/models';
 
 let FriendsTabPage = () => {
+  let navigate = useNavigate();
+
   let [modals, editModals] = useModals();
   let friendRequests = useFriendRequests();
   let friendsList = useFriendsList();
@@ -19,7 +22,7 @@ let FriendsTabPage = () => {
         {friendRequests.filter(
           (friendRequest) => friendRequest.pub !== undefined
         ).length > 0 && (
-          <div class="flex flex-col w-full h-auto max-h-64 overflow-y-auto space-y-2">
+          <div class="flex flex-col w-full h-auto max-h-96 overflow-y-auto space-y-2">
             <div class="flex justify-start items-center uppercase text-md text-gray-400">
               Friend Requests
             </div>
@@ -86,7 +89,7 @@ let FriendsTabPage = () => {
 
         {friendsList.filter((friend) => friend.pub !== undefined).length >
           0 && (
-          <div class="flex flex-col w-full h-auto max-h-64 overflow-y-auto space-y-2">
+          <div class="flex flex-col w-full h-full overflow-y-auto space-y-2">
             <div class="flex justify-start items-center uppercase text-md text-gray-400">
               Friends
             </div>
@@ -115,12 +118,28 @@ let FriendsTabPage = () => {
                   <div class="flex space-x-2">
                     <div
                       class="flex flex-col justify-center items-center p-2 border-l border-t border-r border-b border-gray-300 dark:border-gray-800 hover:text-gray-400 cursor-pointer rounded-full"
-                      onClick={() => {
-                        messaging.createChat(
+                      onClick={async () => {
+                        await messaging.createChat(
                           friend.pub,
-                          ({ errMessage, success }) => {
-                            if (errMessage) return console.log(errMessage);
-                            else return console.log(success);
+                          ({ errMessage, errCode, chat, success }) => {
+                            if (errCode) {
+                              if (errCode === 'chat-already-exists') {
+                                navigate('/');
+
+                                return navigate(
+                                  `/chat/${chat.roomId}/${chat.pub}`,
+                                  { replace: true }
+                                );
+                              } else return console.log(errMessage);
+                            } else {
+                              navigate('/');
+
+                              navigate(`/chat/${chat.roomId}/${chat.pub}`, {
+                                replace: true,
+                              });
+
+                              return console.log(success);
+                            }
                           }
                         );
                       }}

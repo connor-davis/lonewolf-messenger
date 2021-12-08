@@ -2,7 +2,7 @@ import { gunAvatar } from 'gun-avatar';
 import { gun, messaging, user } from 'lonewolf-protocol';
 import moment from 'moment';
 import { useNavigate, useParams } from 'solid-app-router';
-import { createSignal, onCleanup, onMount } from 'solid-js';
+import { createSignal, onMount } from 'solid-js';
 import { createStore } from 'solid-js/store';
 import BackButton from '../../components/buttons/back';
 import Header from '../../components/header/header';
@@ -22,7 +22,7 @@ let ChatPage = () => {
 
   let [message, setMessage] = createSignal('');
 
-  let messages = useMessageList(params.roomId);
+  let messages = useMessageList(params.roomId, params.pub);
 
   onMount(() => {
     if (!params.pub) return;
@@ -32,15 +32,6 @@ let ChatPage = () => {
       setState('alias', (_) => data.alias);
     });
   });
-
-  let scroller = () =>
-    setTimeout(() => {
-      let div = document.getElementById('scrollHere');
-
-      if (div) div.scrollIntoView({ behavior: 'smooth' });
-    }, 500);
-
-  onCleanup(() => clearTimeout(scroller));
 
   return (
     <div class="flex flex-col w-full h-full flex-none overflow-hidden">
@@ -70,8 +61,6 @@ let ChatPage = () => {
           id="messages"
         >
           {messages.map((message) => {
-            scroller();
-
             return (
               <div
                 key={message.id}
@@ -101,11 +90,42 @@ let ChatPage = () => {
                       : 'self-start'
                   }`}
                 >
-                  <div>
-                    {message.sender === user.is.pub ||
-                    message.sender === ('' || undefined)
-                      ? 'You'
-                      : `${info.displayName || state.alias}`}
+                  <div
+                    class={`flex items-center text-xs ${
+                      message.encrypted ? 'text-green-600' : 'text-red-600'
+                    }`}
+                  >
+                    {message.encrypted ? (
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="h-3 w-3"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                        />
+                      </svg>
+                    ) : (
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="h-3 w-3"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z"
+                        />
+                      </svg>
+                    )}
                   </div>
                   <div>•</div>
                   <div>{moment(message.timeSent).format('DD/MM h:mm a')}</div>
@@ -131,8 +151,6 @@ let ChatPage = () => {
             if (event.keyCode === 13) {
               event.preventDefault();
 
-              console.log(params.pub, params.roomId);
-
               messaging.sendMessage(
                 params.roomId,
                 params.pub,
@@ -154,8 +172,6 @@ let ChatPage = () => {
         <div
           class="flex flex-col justify-center items-center p-2 text-white bg-blue-600 hover:text-gray-200 cursor-pointer rounded-full rotate-90 mt-auto mb-1"
           onClick={() => {
-            console.log(params.pub, params.roomId);
-
             messaging.sendMessage(
               params.roomId,
               params.pub,
