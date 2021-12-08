@@ -14,7 +14,6 @@ import SidebarContent from './components/sidebar/sidebarContent';
 import SidebarFooter from './components/sidebar/sidebarFooter';
 import SidebarHeader from './components/sidebar/sidebarHeader';
 import Tabs from './components/tabs/tabs';
-import useFriendsList from './hooks/friendsList';
 import useModals from './hooks/models';
 import useUserSettings from './hooks/userSettings';
 import AuthenticationPage from './pages/authentication/authentication';
@@ -37,8 +36,6 @@ function App() {
   let [settings, setSettings, loadSettings] = useUserSettings();
 
   let [modals, editModals] = useModals();
-
-  let friendsList = useFriendsList();
 
   onMount(() => {
     setLoadingMessage('Loading the application.');

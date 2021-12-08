@@ -1,5 +1,6 @@
 import { Router } from 'solid-app-router';
 import { render } from 'solid-js/web';
+import { registerSW } from 'virtual:pwa-register';
 import App from './App';
 import './index.css';
 
@@ -10,3 +11,12 @@ let RoutedApp = () => (
 );
 
 render(RoutedApp, document.getElementById('root'));
+
+const updateSW = registerSW({
+  onNeedRefresh() {},
+  onOfflineReady() {},
+});
+
+if (typeof window !== 'undefined') {
+  import('./sw');
+}
