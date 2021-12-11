@@ -36,7 +36,7 @@ let ChatPage = () => {
   });
 
   return (
-    <div class="flex flex-col w-full h-full overflow-hidden">
+    <div class="flex flex-col w-full h-full overflow-hidden animate-fade-in">
       {state.alias && (
         <Header
           title={() => (
@@ -71,8 +71,6 @@ let ChatPage = () => {
 
             messagesDiv.scrollTop = 1;
           }
-
-          console.log(messages.length);
         }}
       >
         {messages.filter((message) => message.id !== undefined).length > 0 ? (
@@ -147,9 +145,7 @@ let ChatPage = () => {
                         )}
                       </div>
                       <div>•</div>
-                      <div>
-                        {moment(message.timeSent).format('DD/MM h:mm a')}
-                      </div>
+                      <div>{moment(message.timeSent).format('DD/MM h:mm a')}</div>
                     </div>
                   </div>
                 )
