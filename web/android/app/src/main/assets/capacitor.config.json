@@ -1,6 +1,0 @@
-{
-	"appId": "tech.connordavis.lonewolf.messenger",
-	"appName": "LoneWolf Messenger",
-	"webDir": "dist",
-	"bundledWebRuntime": false
-}
