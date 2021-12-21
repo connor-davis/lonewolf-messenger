@@ -31,7 +31,7 @@ let AppearanceSettingsPage = ({ backEnabled = false }) => {
                 <div
                   class={`flex px-3 py-2 rounded-md ${
                     settings.theme === 'light'
-                      ? 'bg-green-500'
+                      ? 'bg-green-600'
                       : 'bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600'
                   } cursor-pointer`}
                   onClick={() => setSettings({ theme: 'light' })}
@@ -45,7 +45,7 @@ let AppearanceSettingsPage = ({ backEnabled = false }) => {
                 <div
                   class={`flex px-3 py-2 rounded-md ${
                     settings.theme === 'dark'
-                      ? 'bg-green-500'
+                      ? 'bg-green-600'
                       : 'bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600'
                   } cursor-pointer`}
                   onClick={() => setSettings({ theme: 'dark' })}

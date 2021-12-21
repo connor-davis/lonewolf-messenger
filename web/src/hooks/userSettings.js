@@ -3,7 +3,10 @@ import { onMount } from 'solid-js';
 import { createStore } from 'solid-js/store';
 
 let useUserSettings = () => {
-  let [userSettings, setUserSettings] = createStore({});
+  let [userSettings, setUserSettings] = createStore({
+    theme: 'light',
+    encryptedMessages: true,
+  });
 
   onMount(() => {
     if (user.is && user.is.pub)
@@ -11,7 +14,7 @@ let useUserSettings = () => {
         .user()
         .get('settings')
         .on((data, _) => {
-          setUserSettings('theme', () => data.theme || "light");
+          setUserSettings('theme', () => data.theme || 'light');
         });
 
     authentication.isAuthenticated.subscribe((value) => {

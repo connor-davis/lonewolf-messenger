@@ -42,11 +42,7 @@ function App() {
 
     authentication.isAuthenticated.subscribe((value) => {
       if (value) {
-        setIsLoading(true);
-
-        setLoadingMessage('Loading Settings');
-
-        loadSettings(() => setTimeout(() => setIsLoading(false), 500));
+        setIsLoading(false);
       } else {
         setIsLoading(false);
       }
@@ -60,6 +56,12 @@ function App() {
             else return console.log(success);
           }
         );
+
+        setIsLoading(true);
+
+        setLoadingMessage('Loading Settings');
+
+        loadSettings(() => setTimeout(() => setIsLoading(false), 500));
       }
     });
 

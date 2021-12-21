@@ -27,6 +27,7 @@ let SettingsPage = () => {
             <div></div>
             <div>Profile</div>
           </div>
+
           <div
             class="flex justify-start items-center p-3 bg-gray-300 dark:bg-gray-800 hover:bg-gray-400 dark:hover:bg-gray-700 rounded-md overflow-x-hidden cursor-pointer"
             onClick={() => {
@@ -37,6 +38,17 @@ let SettingsPage = () => {
             <div></div>
             <div>Appearance</div>
           </div>
+
+          {/* <div
+            class="flex justify-start items-center p-3 bg-gray-300 dark:bg-gray-800 hover:bg-gray-400 dark:hover:bg-gray-700 rounded-md overflow-x-hidden cursor-pointer"
+            onClick={() => {
+              navigate('/settings/security');
+              setMenuActive(false);
+            }}
+          >
+            <div></div>
+            <div>Security</div>
+          </div> */}
         </div>
         <div
           class={`flex flex-col w-full h-full bg-gray-100 dark:bg-gray-800 ${
