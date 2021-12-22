@@ -22,7 +22,7 @@ let FriendsTabPage = () => {
         {friendRequests.filter(
           (friendRequest) => friendRequest.pub !== undefined
         ).length > 0 && (
-          <div class="flex flex-col w-full h-auto overflow-y-auto space-y-2">
+          <div class="flex flex-col w-full h-auto flex-none max-h-96 overflow-y-auto space-y-2">
             <div class="flex justify-start items-center uppercase text-md text-gray-400">
               Friend Requests
             </div>
@@ -169,7 +169,10 @@ let FriendsTabPage = () => {
 
       <FloatingButtonBottomRight
         content={
-          <AddFriendButton onClick={() => editModals({ addFriend: true })} shadow="blue" />
+          <AddFriendButton
+            onClick={() => editModals({ addFriend: true })}
+            shadow="blue"
+          />
         }
       />
     </div>
