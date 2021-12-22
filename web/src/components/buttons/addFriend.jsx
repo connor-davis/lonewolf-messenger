@@ -1,6 +1,7 @@
 let AddFriendButton = ({
   color = 'blue',
   textColor = 'white',
+  shadow = '',
   onClick = () => {},
 }) => {
   return (

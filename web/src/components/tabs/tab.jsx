@@ -8,6 +8,7 @@ let Tab = ({ label, activeTab, onClick = () => {} }) => {
       } `}
       onClick={() => activeTab() !== label && onClick()}
     >
+      
       {label}
     </div>
   );

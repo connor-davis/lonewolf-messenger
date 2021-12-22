@@ -57,6 +57,8 @@ function App() {
           }
         );
 
+        console.log(user.is.pub)
+
         setIsLoading(true);
 
         setLoadingMessage('Loading Settings');

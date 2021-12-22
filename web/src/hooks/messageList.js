@@ -26,6 +26,9 @@ let useMessageList = (roomId, pub) => {
           .get(roomId)
           .map()
           .once(async (message) => {
+            console.log(message);
+            console.log(friend.epub);
+
             if (message.toString().startsWith('SEA')) {
               let decryptSecretFriend = await SEA.secret(friend.epub, userPair);
               let decryptedMessageFriend = await SEA.decrypt(

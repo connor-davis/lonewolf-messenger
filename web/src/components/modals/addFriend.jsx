@@ -32,18 +32,24 @@ let AddFriendModal = ({ onClose = () => {} }) => {
         }
       });
     } else {
-      gun.get(`~${searchTerm}`).once((user) => {
-        gun.get(user.info['#']).once((info) => {
-          if (user.info) {
-            setSearchResult('pub', user.pub);
-            setSearchResult('alias', user.alias);
-            setSearchResult('displayName', info.displayName);
-            setSearchResult('about', info.about);
-          } else {
-            setSearchResult('pub', user.pub);
-            setSearchResult('alias', user.alias);
+      gun.get(`~@${searchTerm}`).once((data) => {
+        for (let key in data) {
+          if (key.startsWith('~')) {
+            gun.get(key).once((user) => {
+              if (user.info) {
+                gun.get(user.info['#']).once((info) => {
+                  setSearchResult('pub', user.pub);
+                  setSearchResult('alias', user.alias);
+                  setSearchResult('displayName', info.displayName);
+                  setSearchResult('about', info.about);
+                });
+              } else {
+                setSearchResult('pub', user.pub);
+                setSearchResult('alias', user.alias);
+              }
+            });
           }
-        });
+        }
       });
     }
   };
@@ -60,7 +66,7 @@ let AddFriendModal = ({ onClose = () => {} }) => {
         </div>
         <div class="flex items-center uppercase text-lg">Add Friend</div>
         <div class="flex items-center text-sm text-justify text-gray-400">
-          You can add a friend using their @username or their publicKey
+          You can add a friend using their @username
         </div>
 
         {searchResult.alias && (
@@ -124,7 +130,7 @@ let AddFriendModal = ({ onClose = () => {} }) => {
           <>
             <input
               type="text"
-              placeholder="Enter @username or publicKey"
+              placeholder="Enter @username"
               class="relative w-full h-auto border-l border-t border-r border-b rounded-md border-gray-300 dark:border-gray-600 bg-gray-200 dark:bg-gray-700 outline-none p-2 overflow-y-auto"
               value={usernameOrPublicKey()}
               onInput={(event) => {
