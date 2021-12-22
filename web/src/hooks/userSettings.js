@@ -1,32 +1,21 @@
-import { authentication, gun, user } from 'lonewolf-protocol';
+import { gun } from 'lonewolf-protocol';
 import { onMount } from 'solid-js';
 import { createStore } from 'solid-js/store';
 
 let useUserSettings = () => {
-  let [userSettings, setUserSettings] = createStore({
-    theme: 'light',
-    encryptedMessages: true,
-  });
+  let [userSettings, setUserSettings] = createStore(
+    {},
+    { name: 'user-settings' }
+  );
 
   onMount(() => {
-    if (user.is && user.is.pub)
-      return gun
-        .user()
-        .get('settings')
-        .on((data, _) => {
-          setUserSettings('theme', () => data.theme || 'light');
-        });
-
-    authentication.isAuthenticated.subscribe((value) => {
-      if (value)
-        return gun
-          .user()
-          .get('info')
-          .on((data, _) => {
-            setUserSettings('displayName', () => data.displayName);
-            setUserSettings('about', () => data.about);
-          });
-    });
+    gun
+      .user()
+      .get('settings')
+      .on((data, _) => {
+        console.log(data);
+        setUserSettings('theme', () => data.theme || 'light');
+      });
   });
 
   let settings = () => userSettings;
@@ -34,12 +23,7 @@ let useUserSettings = () => {
   let setSettings = (settings) => {
     setUserSettings({ ...userSettings, ...settings });
 
-    if (user.is && user.is.pub)
-      return gun.user().get('settings').put(userSettings);
-
-    authentication.isAuthenticated.subscribe((value) => {
-      if (value) return gun.user().get('info').put(userSettings);
-    });
+    gun.user().get('settings').put(userSettings);
   };
 
   let loadSettings = (callback) => {

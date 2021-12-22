@@ -15,7 +15,6 @@ import SidebarFooter from './components/sidebar/sidebarFooter';
 import SidebarHeader from './components/sidebar/sidebarHeader';
 import Tabs from './components/tabs/tabs';
 import useModals from './hooks/models';
-import useUserSettings from './hooks/userSettings';
 import AuthenticationPage from './pages/authentication/authentication';
 import ChatPage from './pages/chat/chat';
 import ProfilePage from './pages/profile/profile';
@@ -26,14 +25,13 @@ import FriendsTabPage from './pages/tabs/friendsTab';
 import WelcomePage from './pages/welcome/welcome';
 import LoadingProvider from './providers/loadingProvider';
 import NotificationProvider from './providers/notificationProvider';
+import ThemeProvider from './providers/themeProvider';
 
 function App() {
   let [isAuthenticated, setIsAuthenticated] = createSignal(user.is);
 
   let [loadingMessage, setLoadingMessage] = createSignal(undefined);
   let [isLoading, setIsLoading] = createSignal(true);
-
-  let [settings, setSettings, loadSettings] = useUserSettings();
 
   let [modals, editModals] = useModals();
 
@@ -43,48 +41,39 @@ function App() {
     authentication.isAuthenticated.subscribe((value) => {
       if (value) {
         setIsLoading(false);
-      } else {
-        setIsLoading(false);
-      }
 
-      setIsAuthenticated(value);
-
-      if (user.is && value) {
         certificates.generateFriendRequestsCertificate(
           ({ errMessage, success }) => {
             if (errMessage) return console.log(errMessage);
             else return console.log(success);
           }
         );
-
-        console.log(user.is.pub)
-
-        setIsLoading(true);
-
-        setLoadingMessage('Loading Settings');
-
-        loadSettings(() => setTimeout(() => setIsLoading(false), 500));
+      } else {
+        setIsLoading(false);
       }
+
+      setIsAuthenticated(value);
     });
 
-    setTimeout(() => {
-      setLoadingMessage('Checking authentication status.');
-
-      authentication.checkAuth();
-    }, 1000);
+    authentication.checkAuth();
   });
 
   return (
-    <div class={settings.theme}>
-      {modals.addFriend && (
-        <AddFriendModal onClose={() => editModals({ addFriend: false })} />
-      )}
+    <LoadingProvider message={loadingMessage} busy={isLoading}>
+      {isAuthenticated() && (
+        <ThemeProvider
+          setIsLoading={setIsLoading}
+          setLoadingMessage={setLoadingMessage}
+        >
+          <div class="z-10 w-screen h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white select-none outline-none">
+            <NotificationProvider />
 
-      <div class="z-10 w-screen h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white select-none outline-none">
-        <NotificationProvider />
+            {modals.addFriend && (
+              <AddFriendModal
+                onClose={() => editModals({ addFriend: false })}
+              />
+            )}
 
-        <LoadingProvider message={loadingMessage} busy={isLoading}>
-          {isAuthenticated() && (
             <div class="flex flex-col md:flex-row w-full h-full">
               <Sidebar>
                 <SidebarHeader title="LoneWolf" />
@@ -146,12 +135,12 @@ function App() {
                 </Routes>
               </Content>
             </div>
-          )}
+          </div>
+        </ThemeProvider>
+      )}
 
-          {!isAuthenticated() && <AuthenticationPage />}
-        </LoadingProvider>
-      </div>
-    </div>
+      {!isAuthenticated() && <AuthenticationPage />}
+    </LoadingProvider>
   );
 }
 
