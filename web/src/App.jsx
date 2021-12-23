@@ -119,7 +119,7 @@ function App() {
               <Content>
                 <Routes>
                   <Route path="/" element={<WelcomePage />} />
-                  <Route path="/chat/:roomId/:pub" element={<ChatPage />} />
+                  <Route path="/chat/:chatId/:pub" element={<ChatPage />} />
                   <Route
                     path="/profile"
                     element={<ProfilePage backEnabled={true} />}

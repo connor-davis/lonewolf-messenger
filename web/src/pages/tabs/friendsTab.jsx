@@ -3,7 +3,7 @@ import { friends, messaging } from 'lonewolf-protocol';
 import { useNavigate } from 'solid-app-router';
 import AddFriendButton from '../../components/buttons/addFriend';
 import CrossButton from '../../components/buttons/cross';
-import FloatingButtonBottomRight from '../../components/buttons/floating';
+import FloatingButtonBottomRight from '../../components/buttons/floatingBottomRight';
 import TickButton from '../../components/buttons/tick';
 import useFriendRequests from '../../hooks/friendRequests';
 import useFriendsList from '../../hooks/friendsList';

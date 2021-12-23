@@ -1,7 +1,10 @@
 import { gunAvatar } from 'gun-avatar';
+import moment from 'moment';
 import { useNavigate } from 'solid-app-router';
 import AddChatButton from '../../components/buttons/addChat';
-import FloatingButtonBottomRight from '../../components/buttons/floating';
+import ChatButton from '../../components/buttons/chat';
+import FloatingPopUpBottomRight from '../../components/buttons/floatingPopUpBottomRight';
+import GroupChatButton from '../../components/buttons/groupChat';
 import useChatsList from '../../hooks/chatsList';
 
 let ChatsTabPage = () => {
@@ -23,21 +26,32 @@ let ChatsTabPage = () => {
                   navigate('/chat/' + chat.roomId + '/' + chat.pub);
                 }}
               >
-                <div class="flex w-auto h-full space-x-2">
+                <div class="flex w-full h-full space-x-2">
                   <img
                     src={gunAvatar(chat.pub, 40)}
                     class="flex w-auto h-auto rounded-full bg-gray-300 dark:bg-gray-600"
                   />
 
-                  <div class="flex flex-col justify-center w-auto h-full">
+                  <div class="flex flex-col justify-center w-full h-full overflow-hidden">
                     <div class="flex justify-between items-center w-full h-auto">
                       <div class="text-sm text-gray-900 dark:text-white overflow-ellipsis">
-                        {chat.displayName}
+                        {chat.displayName || `@${chat.alias}`}
                       </div>
                     </div>
-                    <div class="text-xs text-gray-400 overflow-ellipsis">
-                      @{chat.alias}
-                    </div>
+                    {chat.latestMessage && (
+                      <div class="flex space-x-2 items-center w-full overflow-hidden">
+                        <div class="text-xs text-gray-400 w-full truncate">
+                          {chat.latestMessage.sender === chat.pub
+                            ? `${chat.latestMessage.content}`
+                            : `You: ${chat.latestMessage.content}`}
+                        </div>
+                        <div class="text-xs text-gray-400 flex-none">
+                          {moment(chat.latestMessage.timeSent).format(
+                            'hh:mm A'
+                          )}
+                        </div>{' '}
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
@@ -46,7 +60,10 @@ let ChatsTabPage = () => {
         </div>
       )}
 
-      <FloatingButtonBottomRight content={<AddChatButton />} />
+      <FloatingPopUpBottomRight main={<AddChatButton />}>
+        <ChatButton />
+        <GroupChatButton />
+      </FloatingPopUpBottomRight>
     </div>
   );
 };

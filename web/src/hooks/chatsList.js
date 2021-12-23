@@ -9,6 +9,7 @@ let useChatsList = () => {
     messaging.chatsList.subscribe(async (chat) => {
       let detailedChat = { ...chat };
 
+      let userPair = await gun.user()._.sea;
       let _user = await gun.user(chat.pub);
 
       if (_user && _user.info) {
@@ -19,15 +20,27 @@ let useChatsList = () => {
 
       detailedChat.alias = _user.alias || undefined;
 
-      setState(
-        [
-          ...state.filter(
-            (current) =>
-              chat && chat.pub !== undefined && current.pub !== chat.pub
-          ),
-          detailedChat,
-        ]
+      let latestMessage = await gun
+        .user()
+        .get('chats')
+        .get(detailedChat.roomId)
+        .get('latestMessage');
+
+      let latestMessageSecret = await SEA.secret(_user.epub, userPair);
+      let decryptedLatestMessage = await SEA.decrypt(
+        latestMessage,
+        latestMessageSecret
       );
+
+      detailedChat.latestMessage = decryptedLatestMessage;
+
+      setState([
+        ...state.filter(
+          (current) =>
+            chat && chat.pub !== undefined && current.pub !== chat.pub
+        ),
+        detailedChat,
+      ]);
     });
   });
 

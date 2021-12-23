@@ -6,6 +6,7 @@ import { createSignal, onMount } from 'solid-js';
 import { createStore } from 'solid-js/store';
 import BackButton from '../../components/buttons/back';
 import Header from '../../components/header/header';
+import useChatMeta from '../../hooks/chatMeta';
 import useMessageList from '../../hooks/messageList';
 import useOtherUserInfo from '../../hooks/otherUserInfo';
 
@@ -19,10 +20,11 @@ let ChatPage = () => {
   );
 
   let info = useOtherUserInfo(params.pub);
+  let [meta, setMeta] = useChatMeta(params.chatId, params.pub);
 
   let [message, setMessage] = createSignal('');
 
-  let messages = useMessageList(params.roomId, params.pub);
+  let messages = useMessageList(params.chatId, params.pub);
 
   let [show, setShow] = createSignal(20);
 
@@ -45,10 +47,10 @@ let ChatPage = () => {
 
               <div class="flex flex-col">
                 <div class="text-sm text-gray-900 dark:text-white overflow-ellipsis">
-                  {info.displayName}
+                  {info.displayName || `@${state.alias}`}
                 </div>
                 <div class="text-xs text-gray-400 overflow-ellipsis">
-                  @{state.alias}
+                  {meta.typing && meta.typing !== state.pub && 'Typing'}
                 </div>
               </div>
             </div>
@@ -145,7 +147,9 @@ let ChatPage = () => {
                         )}
                       </div>
                       <div>•</div>
-                      <div>{moment(message.timeSent).format('DD/MM h:mm a')}</div>
+                      <div>
+                        {moment(message.timeSent).format('DD/MM h:mm a')}
+                      </div>
                     </div>
                   </div>
                 )
@@ -171,22 +175,28 @@ let ChatPage = () => {
           onInput={(event) => {
             setMessage(event.currentTarget.innerText);
           }}
+          onBlur={() => setMeta({ typing: null })}
           onKeyPress={(event) => {
+            setMeta({ typing: state.pub });
+
             if (event.keyCode === 13) {
               event.preventDefault();
+
+              setMeta({ typing: null });
 
               if (message === '') return;
 
               event.currentTarget.innerText = '';
-
+              
               messaging.sendMessage(
-                params.roomId,
+                params.chatId,
                 params.pub,
                 message(),
                 ({ errMessage, success }) => {
                   if (errMessage) return console.log(errMessage);
                   else {
                     setMessage('');
+
                     return console.log(success);
                   }
                 }
@@ -205,7 +215,7 @@ let ChatPage = () => {
             if (messageDiv) messageDiv.innerText = '';
 
             messaging.sendMessage(
-              params.roomId,
+              params.chatId,
               params.pub,
               message(),
               ({ errMessage, success }) => {

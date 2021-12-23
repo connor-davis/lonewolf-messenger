@@ -2,15 +2,15 @@ import { gun } from 'lonewolf-protocol';
 import { onMount } from 'solid-js';
 import { createStore } from 'solid-js/store';
 
-let useMessageList = (roomId, pub) => {
-  let [state, setState] = createStore([], { name: `${roomId}-messages` });
+let useMessageList = (chatId, pub) => {
+  let [state, setState] = createStore([], { name: `${chatId}-messages` });
 
   onMount(async () => {
     let userPair = await gun.user()._.sea;
     let friend = await gun.user(pub);
 
-    if (sessionStorage.getItem(`${roomId}-measages`) && state.length === 0) {
-      setState(JSON.parse(sessionStorage.getItem(`${roomId}-measages`)));
+    if (sessionStorage.getItem(`${chatId}-measages`) && state.length === 0) {
+      setState(JSON.parse(sessionStorage.getItem(`${chatId}-measages`)));
 
       return (async () => {
         let messagesDiv = document.querySelector('#messages');
@@ -23,12 +23,9 @@ let useMessageList = (roomId, pub) => {
         gun
           .user()
           .get('messages')
-          .get(roomId)
+          .get(chatId)
           .map()
           .once(async (message) => {
-            console.log(message);
-            console.log(friend.epub);
-
             if (message.toString().startsWith('SEA')) {
               let decryptSecretFriend = await SEA.secret(friend.epub, userPair);
               let decryptedMessageFriend = await SEA.decrypt(
@@ -56,7 +53,7 @@ let useMessageList = (roomId, pub) => {
                   );
 
                   sessionStorage.setItem(
-                    `${roomId}-measages`,
+                    `${chatId}-measages`,
                     JSON.stringify(state)
                   );
 
@@ -83,7 +80,7 @@ let useMessageList = (roomId, pub) => {
                 );
 
                 sessionStorage.setItem(
-                  `${roomId}-measages`,
+                  `${chatId}-measages`,
                   JSON.stringify(state)
                 );
 
@@ -96,7 +93,7 @@ let useMessageList = (roomId, pub) => {
       gun
         .user()
         .get('messages')
-        .get(roomId)
+        .get(chatId)
         .once((messages) => {
           try {
             (async () => {
@@ -147,14 +144,14 @@ let useMessageList = (roomId, pub) => {
               scroll();
 
               sessionStorage.setItem(
-                `${roomId}-measages`,
+                `${chatId}-measages`,
                 JSON.stringify(state)
               );
 
               gun
                 .user()
                 .get('messages')
-                .get(roomId)
+                .get(chatId)
                 .map()
                 .once(async (message) => {
                   if (message.toString().startsWith('SEA')) {
@@ -188,7 +185,7 @@ let useMessageList = (roomId, pub) => {
                         );
 
                         sessionStorage.setItem(
-                          `${roomId}-measages`,
+                          `${chatId}-measages`,
                           JSON.stringify(state)
                         );
 
@@ -216,7 +213,7 @@ let useMessageList = (roomId, pub) => {
                       );
 
                       sessionStorage.setItem(
-                        `${roomId}-measages`,
+                        `${chatId}-measages`,
                         JSON.stringify(state)
                       );
 
