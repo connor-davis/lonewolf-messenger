@@ -26,23 +26,13 @@ let ProfilePage = ({ backEnabled = false }) => {
   let [about, setAbout] = createSignal('');
 
   onMount(() => {
-    gun.user().on((data) => {
+    gun.user().once((data) => {
       setState('pub', (_) => data.pub);
       setState('alias', (_) => data.alias);
     });
 
     setDisplayName(info.displayName || '');
-    setAbout(info.about || '');
-
-    let aboutInput = document.getElementById('about');
-
-    if (aboutInput) {
-      aboutInput.innerText = about() || info.about || '';
-
-      aboutInput.addEventListener('input', (_) =>
-        setAbout(aboutInput.innerText)
-      );
-    }
+    setAbout(info.about);
 
     window.scrollTo({
       left: 0,
@@ -81,7 +71,7 @@ let ProfilePage = ({ backEnabled = false }) => {
                 type="text"
                 class="relative w-full h-auto border-l border-t border-r border-b rounded-md border-gray-300 dark:border-gray-600 bg-gray-200 dark:bg-gray-700 outline-none p-2 overflow-y-auto"
                 placeholder="What would you like to be called?"
-                value={displayName()}
+                value={info.displayName}
                 disabled={!editingDisplayName()}
                 onInput={(event) => {
                   setDisplayName(event.target.value);
@@ -117,14 +107,18 @@ let ProfilePage = ({ backEnabled = false }) => {
                 placeholder="Tell everyone a bit about yourself."
                 contenteditable={editingAbout()}
                 id="about"
-              ></div>
+              >
+                {info.about}
+              </div>
 
               <div class="flex flex-col justify-center items-center w-10 h-10">
                 {editingAbout() ? (
                   <TickButton
                     extraClass={'hover:text-green-600'}
                     onClick={() => {
-                      setInfo({ about: about() });
+                      setInfo({
+                        about: document.getElementById('about').innerText,
+                      });
                       setEditingAbout(false);
                     }}
                   />

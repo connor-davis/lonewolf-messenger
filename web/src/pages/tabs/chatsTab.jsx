@@ -1,5 +1,7 @@
 import { gunAvatar } from 'gun-avatar';
 import { useNavigate } from 'solid-app-router';
+import AddChatButton from '../../components/buttons/addChat';
+import FloatingButtonBottomRight from '../../components/buttons/floating';
 import useChatsList from '../../hooks/chatsList';
 
 let ChatsTabPage = () => {
@@ -44,7 +46,7 @@ let ChatsTabPage = () => {
         </div>
       )}
 
-      {/* <FloatingButtonBottomRight content={<AddChatButton />} /> */}
+      <FloatingButtonBottomRight content={<AddChatButton />} />
     </div>
   );
 };

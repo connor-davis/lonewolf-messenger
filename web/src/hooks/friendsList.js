@@ -6,16 +6,16 @@ let useFriendsList = () => {
   let [state, setState] = createStore([]);
 
   onMount(() => {
-    friends.friendsList.subscribe((request) => {
+    friends.friendsList.subscribe((friend) => {
       setState(
         [
           ...state.filter(
             (current) =>
-              request &&
-              request.pub !== undefined &&
-              current.pub !== request.pub
+              friend &&
+              friend.pub !== undefined &&
+              current.pub !== friend.pub
           ),
-          request,
+          friend,
         ].sort((a, b) => {
           if (a.alias.toLowerCase() > b.alias.toLowerCase()) return 1;
           if (a.alias.toLowerCase() < b.alias.toLowerCase()) return -1;
@@ -25,14 +25,14 @@ let useFriendsList = () => {
       );
 
       certificates.createChatsCertificate(
-        request.pub,
+        friend.pub,
         ({ errMessage, success }) => {
           if (errMessage) return console.log(errMessage);
           else return console.log(success);
         }
       );
       certificates.createMessagesCertificate(
-        request.pub,
+        friend.pub,
         ({ errMessage, success }) => {
           if (errMessage) return console.log(errMessage);
           else return console.log(success);

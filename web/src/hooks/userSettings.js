@@ -4,7 +4,9 @@ import { createStore } from 'solid-js/store';
 
 let useUserSettings = () => {
   let [userSettings, setUserSettings] = createStore(
-    {},
+    {
+      theme: 'light'
+    },
     { name: 'user-settings' }
   );
 
