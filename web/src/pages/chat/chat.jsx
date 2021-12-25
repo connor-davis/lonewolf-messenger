@@ -132,9 +132,9 @@ let ChatPage = () => {
                           <audio
                             class="hidden"
                             id={message.id + '-audio'}
-                            src={`data:audio/ogg;codec=opus;base64,${message.content}`}
+                            src={`data:audio/mp3;codec=opus;base64,${message.content}`}
                             controls
-                            type="audio/ogg"
+                            type="audio/mp3"
                             onTimeUpdate={(event) => {
                               let _this = event.currentTarget;
 
