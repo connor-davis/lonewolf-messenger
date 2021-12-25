@@ -15,7 +15,7 @@ let createAudioRecording = (roomId, publicKey, callback = () => {}) => {
       chunks.push(e.data);
     };
 
-    mediaRecorder.onstop = function (_) {
+    mediaRecorder.onstop = function (e) {
       const blob = new Blob(chunks, { type: 'audio/mp3; codecs=opus' });
       chunks = [];
 
@@ -39,6 +39,14 @@ let createAudioRecording = (roomId, publicKey, callback = () => {}) => {
           }
         );
       };
+
+      stream.getTracks().forEach(function (track) {
+        if (track.readyState == 'live' && track.kind === 'audio') {
+          track.stop();
+        }
+      });
+
+      return;
     };
   });
 };
