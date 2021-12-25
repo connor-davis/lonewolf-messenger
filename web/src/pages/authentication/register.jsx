@@ -38,7 +38,7 @@ let RegisterCard = ({ showLogin }) => {
   };
 
   return (
-    <div class="flex flex-col w-auto h-auto p-4 bg-white dark:bg-gray-800 rounded-md shadow-sm space-y-5 max-w-xs">
+    <div class="flex flex-col w-auto h-auto p-4 bg-white dark:bg-gray-800 rounded-md shadow-sm space-y-5 max-w-sm">
       <div class="flex justify-center items-center w-full h-auto">
         <LoneWolfLogo />
       </div>

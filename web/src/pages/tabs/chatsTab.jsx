@@ -41,9 +41,29 @@ let ChatsTabPage = () => {
                     {chat.latestMessage && (
                       <div class="flex space-x-2 items-center w-full overflow-hidden">
                         <div class="text-xs text-gray-400 w-full truncate">
-                          {chat.latestMessage.sender === chat.pub
-                            ? `${chat.latestMessage.content}`
-                            : `You: ${chat.latestMessage.content}`}
+                          {chat.latestMessage.type === undefined && (
+                            <>
+                              {chat.latestMessage.sender === chat.pub
+                                ? `${chat.latestMessage.content}`
+                                : `You: ${chat.latestMessage.content}`}
+                            </>
+                          )}
+
+                          {chat.latestMessage.type === 'text' && (
+                            <>
+                              {chat.latestMessage.sender === chat.pub
+                                ? `${chat.latestMessage.content}`
+                                : `You: ${chat.latestMessage.content}`}
+                            </>
+                          )}
+
+                          {chat.latestMessage.type === 'voice' && (
+                            <>
+                              {chat.latestMessage.sender === chat.pub
+                                ? `Voice Recording`
+                                : `You: Voice Recording`}
+                            </>
+                          )}
                         </div>
                         <div class="text-xs text-gray-400 flex-none">
                           {moment(chat.latestMessage.timeSent).format(
