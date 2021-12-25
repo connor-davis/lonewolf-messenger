@@ -300,7 +300,10 @@ let ChatPage = () => {
 
               setMeta({ typing: null });
 
-              if (message() === '') return;
+              if (message() === '') {
+                setTyping(false);
+                return;
+              }
 
               event.currentTarget.innerText = '';
 
@@ -327,7 +330,10 @@ let ChatPage = () => {
           <div
             class="flex flex-col justify-center items-center p-2 text-white bg-blue-600 hover:text-gray-200 cursor-pointer rounded-full rotate-90 mt-auto mb-1"
             onClick={() => {
-              if (message() === '') return;
+              if (message() === '') {
+                setTyping(false);
+                return;
+              }
 
               let messageDiv = document.getElementById('message');
 

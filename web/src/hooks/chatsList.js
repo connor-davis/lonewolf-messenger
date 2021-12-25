@@ -40,7 +40,11 @@ let useChatsList = () => {
             chat && chat.pub !== undefined && current.pub !== chat.pub
         ),
         detailedChat,
-      ]);
+      ].sort((a, b) => {
+        if (a.latestMessage.timeSent > b.latestMessage.timeSent) return -1;
+        if (a.latestMessage.timeSent < b.latestMessage.timeSent) return 1;
+        return 0;
+      }));
     });
   });
 
