@@ -2754,10 +2754,10 @@ log-symbols@^4.1.0:
     chalk "^4.1.0"
     is-unicode-supported "^0.1.0"
 
-lonewolf-protocol@^0.0.8:
-  version "0.0.8"
-  resolved "https://registry.yarnpkg.com/lonewolf-protocol/-/lonewolf-protocol-0.0.8.tgz#92e363b8998bedc47cbe200207fbe3165c7cb299"
-  integrity sha512-zMBsSqJ+5/Z1JdDzzgmMeqakQNHktx40kKBiouZsiOshG5hYwGDPoeN5XBe9CK9HliWxgKId/mOaSkLht94MBA==
+lonewolf-protocol@0.0.9:
+  version "0.0.9"
+  resolved "https://registry.yarnpkg.com/lonewolf-protocol/-/lonewolf-protocol-0.0.9.tgz#b16fd5846498f8944bb3abd3ba72e6c6a22e1a6d"
+  integrity sha512-+6U4Zz4vyqQRuv+UUUoXswEkHFi3/nOEccfYw+LITQZ1re2Au+ejredU/fG4GatGlrA+4NSnEIwBawvk8noJpA==
   dependencies:
     axios "^0.24.0"
     gun "^0.2020.1235"
