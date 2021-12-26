@@ -132,29 +132,48 @@ let ChatPage = () => {
                           <audio
                             class="hidden"
                             id={message.id + '-audio'}
-                            src={`data:audio/mp3;codec=opus;base64,${message.content}`}
                             controls
                             type="audio/mp3"
                             onTimeUpdate={(event) => {
-                              let _this = event.currentTarget;
+                              let _this = event.target;
 
                               let progressBar = document.getElementById(
                                 message.id + '-progressbar'
                               );
 
-                              let progress = Math.floor(
-                                (Math.floor(_this.currentTime) /
-                                  Math.floor(
+                              if (
+                                _this.duration === NaN ||
+                                _this.duration === Infinity
+                              ) {
+                                let progress = Math.round(
+                                  (_this.currentTime /
                                     moment
                                       .duration(message.duration)
-                                      .asSeconds()
-                                  )) *
-                                  100
-                              );
+                                      .asSeconds()) *
+                                    100
+                                );
 
-                              progressBar.style.width = `${progress}%`;
+                                progressBar.style.width = `${progress}%`;
+                              } else {
+                                let progress = Math.round(
+                                  (_this.currentTime /
+                                    parseFloat(_this.duration)) *
+                                    100
+                                );
+
+                                progressBar.style.width = `${progress}%`;
+                              }
                             }}
-                          ></audio>
+                          >
+                            <source
+                              src={`${
+                                message.content.startsWith('data')
+                                  ? message.content
+                                  : `data:audio/mp3;codec=opus;base64,${message.content}`
+                              }`}
+                              type="audio/mp3"
+                            />
+                          </audio>
                           <div class="flex space-x-2 items-center w-96 h-auto p-2">
                             <div>
                               {moment.utc(message.duration).format('mm:ss')}

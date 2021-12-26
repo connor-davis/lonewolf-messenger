@@ -1,5 +1,7 @@
-import { messaging } from 'lonewolf-protocol';
+import { SEA } from 'gun/gun';
+import { gun, messaging } from 'lonewolf-protocol';
 import moment from 'moment';
+import { v4 } from 'uuid';
 
 let createAudioRecording = (roomId, publicKey, callback = () => {}) => {
   navigator.mediaDevices.getUserMedia({ audio: true }).then(function (stream) {
@@ -24,14 +26,40 @@ let createAudioRecording = (roomId, publicKey, callback = () => {}) => {
       reader.onloadend = async function () {
         var base64data = reader.result;
 
+        let userPub = await gun.user().pair().pub;
+        let userPair = await gun.user()._.sea;
+        let friend = await gun.user(publicKey);
+
+        let messageId = v4();
+        let timeSent = Date.now();
         let end = moment(Date.now());
+
+        let secret = await SEA.secret(friend.epub, userPair);
+        let encryptedMessage = await SEA.encrypt(
+          JSON.stringify({
+            id: messageId,
+            content: base64data,
+            duration: end.diff(start),
+            timeSent,
+            sender: userPub,
+            type: 'voice',
+          }),
+          secret
+        );
+
+        let upload = await ipfs.add(encryptedMessage);
+
+        console.log(upload);
 
         messaging.sendVoiceMessage(
           roomId,
           publicKey,
           {
-            data: base64data.split(',')[1],
-            duration: end.diff(start),
+            path: upload.path,
+            messageId,
+            timeSent,
+            sender: userPub,
+            type: 'voice',
           },
           ({ errMessage, success }) => {
             if (errMessage) return console.log(errMessage);

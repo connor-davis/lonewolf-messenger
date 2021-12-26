@@ -1,8 +1,14 @@
+import { resolve } from 'path';
 import { defineConfig } from 'vite';
 import { VitePWA } from 'vite-plugin-pwa';
 import solidPlugin from 'vite-plugin-solid';
 
 export default defineConfig({
+  resolve: {
+    alias: {
+      '@src': resolve(__dirname, 'src'),
+    },
+  },
   plugins: [
     solidPlugin(),
     VitePWA({

@@ -26,25 +26,31 @@ let useChatsList = () => {
         .get(detailedChat.roomId)
         .get('latestMessage');
 
-      let latestMessageSecret = await SEA.secret(_user.epub, userPair);
-      let decryptedLatestMessage = await SEA.decrypt(
-        latestMessage,
-        latestMessageSecret
+      if (!latestMessage.path) {
+        let latestMessageSecret = await SEA.secret(_user.epub, userPair);
+        let decryptedLatestMessage = await SEA.decrypt(
+          latestMessage,
+          latestMessageSecret
+        );
+
+        detailedChat.latestMessage = decryptedLatestMessage;
+      } else {
+        detailedChat.latestMessage = latestMessage;
+      }
+
+      setState(
+        [
+          ...state.filter(
+            (current) =>
+              chat && chat.pub !== undefined && current.pub !== chat.pub
+          ),
+          detailedChat,
+        ].sort((a, b) => {
+          if (a.latestMessage.timeSent > b.latestMessage.timeSent) return -1;
+          if (a.latestMessage.timeSent < b.latestMessage.timeSent) return 1;
+          return 0;
+        })
       );
-
-      detailedChat.latestMessage = decryptedLatestMessage;
-
-      setState([
-        ...state.filter(
-          (current) =>
-            chat && chat.pub !== undefined && current.pub !== chat.pub
-        ),
-        detailedChat,
-      ].sort((a, b) => {
-        if (a.latestMessage.timeSent > b.latestMessage.timeSent) return -1;
-        if (a.latestMessage.timeSent < b.latestMessage.timeSent) return 1;
-        return 0;
-      }));
     });
   });
 

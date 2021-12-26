@@ -26,6 +26,7 @@ import WelcomePage from './pages/welcome/welcome';
 import LoadingProvider from './providers/loadingProvider';
 import NotificationProvider from './providers/notificationProvider';
 import ThemeProvider from './providers/themeProvider';
+import './utils/ipfs';
 
 function App() {
   let [isAuthenticated, setIsAuthenticated] = createSignal(user.is);
@@ -40,14 +41,14 @@ function App() {
 
     authentication.isAuthenticated.subscribe((value) => {
       if (value) {
-        setIsLoading(false);
-
         certificates.generateFriendRequestsCertificate(
           ({ errMessage, success }) => {
             if (errMessage) return console.log(errMessage);
             else return console.log(success);
           }
         );
+
+        setIsLoading(false);
       } else {
         setIsLoading(false);
       }
@@ -60,6 +61,11 @@ function App() {
 
   return (
     <LoadingProvider message={loadingMessage} busy={isLoading}>
+      <div
+        class="absolute top-2 left-2 w-2 h-2 roundef-full"
+        id="status-ball"
+      ></div>
+
       {isAuthenticated() && (
         <ThemeProvider
           setIsLoading={setIsLoading}

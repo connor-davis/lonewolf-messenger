@@ -1,3 +1,4 @@
+import toBuffer from 'it-to-buffer';
 import { gun } from 'lonewolf-protocol';
 import { onMount } from 'solid-js';
 import { createStore } from 'solid-js/store';
@@ -26,6 +27,47 @@ let useMessageList = (chatId, pub) => {
           .get(chatId)
           .map()
           .once(async (message) => {
+            if (message.path !== undefined) {
+              let fileContents = await toBuffer(ipfs.cat(message.path));
+              let encryptedMessage = new TextDecoder().decode(fileContents);
+
+              let decryptSecretFriend = await SEA.secret(friend.epub, userPair);
+              let decryptedMessageFriend = await SEA.decrypt(
+                encryptedMessage,
+                decryptSecretFriend
+              );
+
+              if (decryptedMessageFriend) {
+                let individual = {
+                  ...decryptedMessageFriend,
+                  encrypted: true,
+                };
+
+                let exists =
+                  state.filter((current) => current.id === individual.id)[0] !==
+                  undefined;
+
+                if (!exists) {
+                  setState(
+                    [...state, individual].sort((a, b) => {
+                      if (a.timeSent > b.timeSent) return 1;
+                      if (a.timeSent < b.timeSent) return -1;
+                      return 0;
+                    })
+                  );
+
+                  sessionStorage.setItem(
+                    `${chatId}-measages`,
+                    JSON.stringify(state)
+                  );
+
+                  return scroll();
+                }
+              }
+
+              return;
+            }
+
             if (message.toString().startsWith('SEA')) {
               let decryptSecretFriend = await SEA.secret(friend.epub, userPair);
               let decryptedMessageFriend = await SEA.decrypt(
@@ -102,6 +144,51 @@ let useMessageList = (chatId, pub) => {
               for (let key in messages) {
                 let message = messages[key].toString();
 
+                if (message.path !== undefined) {
+                  let fileContents = await toBuffer(ipfs.cat(message.path));
+                  let encryptedMessage = new TextDecoder().decode(fileContents);
+
+                  let decryptSecretFriend = await SEA.secret(
+                    friend.epub,
+                    userPair
+                  );
+                  let decryptedMessageFriend = await SEA.decrypt(
+                    encryptedMessage,
+                    decryptSecretFriend
+                  );
+
+                  if (decryptedMessageFriend) {
+                    let individual = {
+                      ...decryptedMessageFriend,
+                      encrypted: true,
+                    };
+
+                    let exists =
+                      state.filter(
+                        (current) => current.id === individual.id
+                      )[0] !== undefined;
+
+                    if (!exists) {
+                      setState(
+                        [...state, individual].sort((a, b) => {
+                          if (a.timeSent > b.timeSent) return 1;
+                          if (a.timeSent < b.timeSent) return -1;
+                          return 0;
+                        })
+                      );
+
+                      sessionStorage.setItem(
+                        `${chatId}-measages`,
+                        JSON.stringify(state)
+                      );
+
+                      return scroll();
+                    }
+                  }
+
+                  return;
+                }
+
                 let decryptSecretFriend = await SEA.secret(
                   friend.epub,
                   userPair
@@ -154,6 +241,53 @@ let useMessageList = (chatId, pub) => {
                 .get(chatId)
                 .map()
                 .once(async (message) => {
+                  if (message.path !== undefined) {
+                    let fileContents = await toBuffer(ipfs.cat(message.path));
+                    let encryptedMessage = new TextDecoder().decode(
+                      fileContents
+                    );
+
+                    let decryptSecretFriend = await SEA.secret(
+                      friend.epub,
+                      userPair
+                    );
+                    let decryptedMessageFriend = await SEA.decrypt(
+                      encryptedMessage,
+                      decryptSecretFriend
+                    );
+
+                    if (decryptedMessageFriend) {
+                      let individual = {
+                        ...decryptedMessageFriend,
+                        encrypted: true,
+                      };
+
+                      let exists =
+                        state.filter(
+                          (current) => current.id === individual.id
+                        )[0] !== undefined;
+
+                      if (!exists) {
+                        setState(
+                          [...state, individual].sort((a, b) => {
+                            if (a.timeSent > b.timeSent) return 1;
+                            if (a.timeSent < b.timeSent) return -1;
+                            return 0;
+                          })
+                        );
+
+                        sessionStorage.setItem(
+                          `${chatId}-measages`,
+                          JSON.stringify(state)
+                        );
+
+                        return scroll();
+                      }
+                    }
+
+                    return;
+                  }
+
                   if (message.toString().startsWith('SEA')) {
                     let decryptSecretFriend = await SEA.secret(
                       friend.epub,
