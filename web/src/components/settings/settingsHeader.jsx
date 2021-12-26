@@ -8,14 +8,14 @@ let SettingsHeader = ({ activateMenu = () => {} }) => {
 
   return (
     <>
-      <div class="hidden lg:block flex-none">
+      <div class="hidden md:block flex-none">
         <Header
           title="Settings"
           start={() => <BackButton onClick={() => navigate('/')} />}
         />
       </div>
 
-      <div class="lg:hidden block flex-none">
+      <div class="md:hidden block flex-none">
         <Header
           title="Settings"
           start={() => <BackButton onClick={() => navigate('/')} />}

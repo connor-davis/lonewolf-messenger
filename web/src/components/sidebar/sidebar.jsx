@@ -1,5 +1,5 @@
 let Sidebar = ({ children }) => {
-    return <div class="hidden md:flex flex-col w-96 lg:w-1/3 h-screen">
+    return <div class="hidden md:flex flex-col w-2/5 lg:w-1/4 flex-none h-screen">
         {children}
     </div>
 }
