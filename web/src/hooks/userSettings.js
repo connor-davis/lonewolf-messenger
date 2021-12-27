@@ -15,7 +15,6 @@ let useUserSettings = () => {
       .user()
       .get('settings')
       .on((data, _) => {
-        console.log(data);
         setUserSettings('theme', () => data.theme || 'light');
       });
   });

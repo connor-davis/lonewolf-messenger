@@ -4,6 +4,10 @@ import { registerSW } from 'virtual:pwa-register';
 import App from './App';
 import './index.css';
 
+if (typeof global === 'undefined') {
+  window.global = window;
+}
+
 let RoutedApp = () => (
   <Router>
     <App />

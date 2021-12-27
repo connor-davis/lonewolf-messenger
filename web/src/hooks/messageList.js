@@ -1,4 +1,3 @@
-import toBuffer from 'it-to-buffer';
 import { gun } from 'lonewolf-protocol';
 import { onMount } from 'solid-js';
 import { createStore } from 'solid-js/store';
@@ -28,8 +27,11 @@ let useMessageList = (chatId, pub) => {
           .map()
           .once(async (message) => {
             if (message.path !== undefined) {
-              let fileContents = await toBuffer(ipfs.cat(message.path));
-              let encryptedMessage = new TextDecoder().decode(fileContents);
+              let response = await fetch('https://siasky.net/' + message.path);
+
+              if (response.status !== 200) return;
+
+              let encryptedMessage = await response.text();
 
               let decryptSecretFriend = await SEA.secret(friend.epub, userPair);
               let decryptedMessageFriend = await SEA.decrypt(
@@ -145,8 +147,13 @@ let useMessageList = (chatId, pub) => {
                 let message = messages[key].toString();
 
                 if (message.path !== undefined) {
-                  let fileContents = await toBuffer(ipfs.cat(message.path));
-                  let encryptedMessage = new TextDecoder().decode(fileContents);
+                  let response = await fetch(
+                    'https://siasky.net/' + message.path
+                  );
+
+                  if (response.status !== 200) return;
+
+                  let encryptedMessage = await response.text();
 
                   let decryptSecretFriend = await SEA.secret(
                     friend.epub,
@@ -242,10 +249,13 @@ let useMessageList = (chatId, pub) => {
                 .map()
                 .once(async (message) => {
                   if (message.path !== undefined) {
-                    let fileContents = await toBuffer(ipfs.cat(message.path));
-                    let encryptedMessage = new TextDecoder().decode(
-                      fileContents
+                    let response = await fetch(
+                      'https://siasky.net/' + message.path
                     );
+
+                    if (response.status !== 200) return;
+
+                    let encryptedMessage = await response.text();
 
                     let decryptSecretFriend = await SEA.secret(
                       friend.epub,

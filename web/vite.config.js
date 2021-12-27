@@ -1,4 +1,5 @@
 import { resolve } from 'path';
+import nodePolyfills from 'rollup-plugin-polyfill-node';
 import { defineConfig } from 'vite';
 import { VitePWA } from 'vite-plugin-pwa';
 import solidPlugin from 'vite-plugin-solid';
@@ -10,6 +11,16 @@ export default defineConfig({
     },
   },
   plugins: [
+    nodePolyfills({
+      // include: [
+      //   '*.js',
+      //   'node_modules/**/*.js',
+      //   // (1)
+      //   new RegExp('node_modules/.vite/.*js'),
+      // ],
+      // // (2)
+      // exclude: ['node_modules/polyfill-nodeglobal.js'],
+    }),
     solidPlugin(),
     VitePWA({
       registerType: 'autoUpdate',

@@ -20,16 +20,17 @@ import ChatPage from './pages/chat/chat';
 import ProfilePage from './pages/profile/profile';
 import AppearanceSettingsPage from './pages/settings/appearanceSettings';
 import SettingsPage from './pages/settings/settings';
+import SystemsStatusSettingsPage from './pages/settings/systemsStatusSettings';
 import ChatsTabPage from './pages/tabs/chatsTab';
 import FriendsTabPage from './pages/tabs/friendsTab';
 import WelcomePage from './pages/welcome/welcome';
 import LoadingProvider from './providers/loadingProvider';
 import NotificationProvider from './providers/notificationProvider';
 import ThemeProvider from './providers/themeProvider';
-import './utils/ipfs';
+import { initializeIpfs } from './utils/ipfs';
 
 function App() {
-  let [isAuthenticated, setIsAuthenticated] = createSignal(user.is);
+  let [isAuthenticated, setIsAuthenticated] = createSignal(false);
 
   let [loadingMessage, setLoadingMessage] = createSignal(undefined);
   let [isLoading, setIsLoading] = createSignal(true);
@@ -37,35 +38,38 @@ function App() {
   let [modals, editModals] = useModals();
 
   onMount(() => {
+    setIsLoading(true);
     setLoadingMessage('Loading the application.');
 
-    authentication.isAuthenticated.subscribe((value) => {
-      if (value) {
-        certificates.generateFriendRequestsCertificate(
-          ({ errMessage, success }) => {
-            if (errMessage) return console.log(errMessage);
-            else return console.log(success);
+    (async () => {
+      setIsLoading(true);
+      setLoadingMessage('Initializing Ipfs.');
+
+      await initializeIpfs(window, () => {
+        authentication.isAuthenticated.subscribe((value) => {
+          if (value) {
+            certificates.generateFriendRequestsCertificate(
+              ({ errMessage, success }) => {
+                if (errMessage) return console.log(errMessage);
+                else return console.log(success);
+              }
+            );
+
+            setIsLoading(false);
+          } else {
+            setIsLoading(false);
           }
-        );
 
-        setIsLoading(false);
-      } else {
-        setIsLoading(false);
-      }
+          setIsAuthenticated(value);
+        });
 
-      setIsAuthenticated(value);
-    });
-
-    authentication.checkAuth();
+        authentication.checkAuth();
+      });
+    })();
   });
 
   return (
     <LoadingProvider message={loadingMessage} busy={isLoading}>
-      <div
-        class="absolute top-2 left-2 w-2 h-2 roundef-full"
-        id="status-ball"
-      ></div>
-
       {isAuthenticated() && (
         <ThemeProvider
           setIsLoading={setIsLoading}
@@ -136,6 +140,10 @@ function App() {
                     <Route
                       path="/appearance"
                       element={<AppearanceSettingsPage />}
+                    />
+                    <Route
+                      path="/systems-status"
+                      element={<SystemsStatusSettingsPage />}
                     />
                   </Route>
                 </Routes>

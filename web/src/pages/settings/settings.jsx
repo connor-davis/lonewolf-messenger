@@ -39,6 +39,17 @@ let SettingsPage = () => {
               <div></div>
               <div>Appearance</div>
             </div>
+
+            <div
+              class="flex justify-start items-center p-3 bg-gray-300 dark:bg-gray-800 hover:bg-gray-400 dark:hover:bg-gray-700 rounded-md overflow-x-hidden cursor-pointer"
+              onClick={() => {
+                navigate('/settings/systems-status');
+                setMenuActive(false);
+              }}
+            >
+              <div></div>
+              <div>Systems Status</div>
+            </div>
           </div>
 
           <div class="hidden md:flex md:flex-col md:space-y-2">
@@ -62,6 +73,17 @@ let SettingsPage = () => {
             >
               <div></div>
               <div>Appearance</div>
+            </div>
+
+            <div
+              class="flex justify-start items-center p-3 bg-gray-300 dark:bg-gray-800 hover:bg-gray-400 dark:hover:bg-gray-700 rounded-md overflow-x-hidden cursor-pointer"
+              onClick={() => {
+                navigate('/settings/systems-status');
+                // setMenuActive(false);
+              }}
+            >
+              <div></div>
+              <div>Systems Status</div>
             </div>
           </div>
 

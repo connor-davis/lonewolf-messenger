@@ -109,28 +109,30 @@ let ChatPage = () => {
                   <div
                     key={message.id}
                     id={message.id}
-                    class={`flex flex-col space-y-1 ${
+                    class={`flex flex-col w-full space-y-1 flex-none ${
                       message.sender === user.is.pub ||
                       message.sender === ('' || undefined)
-                        ? 'pl-1/6'
-                        : 'mr-1/6'
+                        ? 'pl-2/6'
+                        : 'mr-2/6'
                     }`}
                   >
                     <div
-                      class={`w-auto h-full space-x-2 break-words bg-gray-200 dark:bg-gray-900 rounded p-2 select-text ${
+                      class={`w-auto ${
+                        message.type !== 'voice' && 'max-w-xs md:max-w-3xl'
+                      } h-full space-x-2 break-words rounded p-2 select-text ${
                         message.sender === user.is.pub ||
                         message.sender === ('' || undefined)
-                          ? 'self-end'
-                          : 'self-start'
+                          ? 'self-end bg-gray-100 dark:bg-gray-700'
+                          : 'self-start bg-gray-300 dark:bg-gray-900'
                       }`}
                     >
                       {message.type === undefined && message.content}
                       {message.type === 'text' && message.content}
 
                       {message.type === 'voice' && (
-                        <div>
+                        <>
                           <audio
-                            class="hidden"
+                            class="hidden w-0"
                             id={message.id + '-audio'}
                             controls
                             type="audio/mp3"
@@ -174,18 +176,18 @@ let ChatPage = () => {
                               type="audio/mp3"
                             />
                           </audio>
-                          <div class="flex space-x-2 items-center w-96 h-auto p-2">
-                            <div>
+                          <div class="flex items-center w-80 lg:w-96 h-auto m-0 p-2">
+                            <div class="flex">
                               {moment.utc(message.duration).format('mm:ss')}
                             </div>
-                            <div class="flex w-full h-2 bg-gray-300 rounded">
+                            <div class="flex w-full h-2 mx-2 bg-gray-300 rounded">
                               <div
                                 id={message.id + '-progressbar'}
                                 class="h-full bg-blue-600 rounded"
                               ></div>
                             </div>
                             <div
-                              class="flex justify-center items-center cursor-pointer hover:text-gray-400"
+                              class="flex justify-center items-center w-10 h-10 cursor-pointer hover:text-gray-400"
                               onClick={(event) => {
                                 let audioRecording = document.getElementById(
                                   message.id + '-audio'
@@ -230,7 +232,7 @@ let ChatPage = () => {
                               </svg>
                             </div>
                           </div>
-                        </div>
+                        </>
                       )}
                     </div>
                     <div
