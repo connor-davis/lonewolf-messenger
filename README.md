@@ -6,6 +6,8 @@ Welcome to LoneWolf Messenger. LoneWolf Messenger is built to be decentralized a
 
 - [x] Authentication
 - [x] Profile Management
+    - [x] Basic Profile
+    - [ ] Profile Image
 - [x] Appearance Settings
 - [x] Friend Requests
     - [x] Accept Friend Request
@@ -14,5 +16,8 @@ Welcome to LoneWolf Messenger. LoneWolf Messenger is built to be decentralized a
 - [x] Chat Creation
 - [x] Chat List
 - [x] Messaging
+    - [x] Text Messaging
+    - [x] Voice Recordings
+    - [ ] File Sharing
 - [x] End-To-End Encrypted Messaging
 - [ ] Group Messaging
