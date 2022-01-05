@@ -17,6 +17,7 @@
     "vite-plugin-solid": "^2.1.4"
   },
   "dependencies": {
+    "axios": "^0.24.0",
     "buffer": "^6.0.3",
     "gun": "^0.2020.1235",
     "gun-avatar": "^1.3.5",
@@ -28,7 +29,6 @@
     "orbit-db": "^0.28.0",
     "rollup-plugin-polyfill-node": "^0.8.0",
     "rxjs": "^7.4.0",
-    "skynet-js": "^3.0.2",
     "solid-app-router": "^0.1.14",
     "solid-js": "^1.2.6",
     "uuid": "^8.3.2",

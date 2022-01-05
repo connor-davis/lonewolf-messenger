@@ -1,3 +1,4 @@
+import toBuffer from 'it-to-buffer';
 import { gun } from 'lonewolf-protocol';
 import { onMount } from 'solid-js';
 import { createStore } from 'solid-js/store';
@@ -27,45 +28,48 @@ let useMessageList = (chatId, pub) => {
           .map()
           .once(async (message) => {
             if (message.path !== undefined) {
-              let response = await fetch('https://siasky.net/' + message.path);
+              try {
+                let buffer = await toBuffer(window.ipfs.cat(message.path));
+                let encryptedMessage = new TextDecoder().decode(buffer);
 
-              if (response.status !== 200) return;
+                let decryptSecretFriend = await SEA.secret(
+                  friend.epub,
+                  userPair
+                );
+                let decryptedMessageFriend = await SEA.decrypt(
+                  encryptedMessage,
+                  decryptSecretFriend
+                );
 
-              let encryptedMessage = await response.text();
+                if (decryptedMessageFriend) {
+                  let individual = {
+                    ...decryptedMessageFriend,
+                    encrypted: true,
+                  };
 
-              let decryptSecretFriend = await SEA.secret(friend.epub, userPair);
-              let decryptedMessageFriend = await SEA.decrypt(
-                encryptedMessage,
-                decryptSecretFriend
-              );
+                  let exists =
+                    state.filter(
+                      (current) => current.id === individual.id
+                    )[0] !== undefined;
 
-              if (decryptedMessageFriend) {
-                let individual = {
-                  ...decryptedMessageFriend,
-                  encrypted: true,
-                };
+                  if (!exists) {
+                    setState(
+                      [...state, individual].sort((a, b) => {
+                        if (a.timeSent > b.timeSent) return 1;
+                        if (a.timeSent < b.timeSent) return -1;
+                        return 0;
+                      })
+                    );
 
-                let exists =
-                  state.filter((current) => current.id === individual.id)[0] !==
-                  undefined;
+                    sessionStorage.setItem(
+                      `${chatId}-measages`,
+                      JSON.stringify(state)
+                    );
 
-                if (!exists) {
-                  setState(
-                    [...state, individual].sort((a, b) => {
-                      if (a.timeSent > b.timeSent) return 1;
-                      if (a.timeSent < b.timeSent) return -1;
-                      return 0;
-                    })
-                  );
-
-                  sessionStorage.setItem(
-                    `${chatId}-measages`,
-                    JSON.stringify(state)
-                  );
-
-                  return scroll();
+                    return scroll();
+                  }
                 }
-              }
+              } catch (error) {}
 
               return;
             }
@@ -147,51 +151,48 @@ let useMessageList = (chatId, pub) => {
                 let message = messages[key].toString();
 
                 if (message.path !== undefined) {
-                  let response = await fetch(
-                    'https://siasky.net/' + message.path
-                  );
+                  try {
+                    let buffer = await toBuffer(window.ipfs.cat(message.path));
+                    let encryptedMessage = new TextDecoder().decode(buffer);
 
-                  if (response.status !== 200) return;
+                    let decryptSecretFriend = await SEA.secret(
+                      friend.epub,
+                      userPair
+                    );
+                    let decryptedMessageFriend = await SEA.decrypt(
+                      encryptedMessage,
+                      decryptSecretFriend
+                    );
 
-                  let encryptedMessage = await response.text();
+                    if (decryptedMessageFriend) {
+                      let individual = {
+                        ...decryptedMessageFriend,
+                        encrypted: true,
+                      };
 
-                  let decryptSecretFriend = await SEA.secret(
-                    friend.epub,
-                    userPair
-                  );
-                  let decryptedMessageFriend = await SEA.decrypt(
-                    encryptedMessage,
-                    decryptSecretFriend
-                  );
+                      let exists =
+                        state.filter(
+                          (current) => current.id === individual.id
+                        )[0] !== undefined;
 
-                  if (decryptedMessageFriend) {
-                    let individual = {
-                      ...decryptedMessageFriend,
-                      encrypted: true,
-                    };
+                      if (!exists) {
+                        setState(
+                          [...state, individual].sort((a, b) => {
+                            if (a.timeSent > b.timeSent) return 1;
+                            if (a.timeSent < b.timeSent) return -1;
+                            return 0;
+                          })
+                        );
 
-                    let exists =
-                      state.filter(
-                        (current) => current.id === individual.id
-                      )[0] !== undefined;
+                        sessionStorage.setItem(
+                          `${chatId}-measages`,
+                          JSON.stringify(state)
+                        );
 
-                    if (!exists) {
-                      setState(
-                        [...state, individual].sort((a, b) => {
-                          if (a.timeSent > b.timeSent) return 1;
-                          if (a.timeSent < b.timeSent) return -1;
-                          return 0;
-                        })
-                      );
-
-                      sessionStorage.setItem(
-                        `${chatId}-measages`,
-                        JSON.stringify(state)
-                      );
-
-                      return scroll();
+                        return scroll();
+                      }
                     }
-                  }
+                  } catch (error) {}
 
                   return;
                 }
@@ -249,51 +250,50 @@ let useMessageList = (chatId, pub) => {
                 .map()
                 .once(async (message) => {
                   if (message.path !== undefined) {
-                    let response = await fetch(
-                      'https://siasky.net/' + message.path
-                    );
+                    try {
+                      let buffer = await toBuffer(
+                        window.ipfs.cat(message.path)
+                      );
+                      let encryptedMessage = new TextDecoder().decode(buffer);
 
-                    if (response.status !== 200) return;
+                      let decryptSecretFriend = await SEA.secret(
+                        friend.epub,
+                        userPair
+                      );
+                      let decryptedMessageFriend = await SEA.decrypt(
+                        encryptedMessage,
+                        decryptSecretFriend
+                      );
 
-                    let encryptedMessage = await response.text();
+                      if (decryptedMessageFriend) {
+                        let individual = {
+                          ...decryptedMessageFriend,
+                          encrypted: true,
+                        };
 
-                    let decryptSecretFriend = await SEA.secret(
-                      friend.epub,
-                      userPair
-                    );
-                    let decryptedMessageFriend = await SEA.decrypt(
-                      encryptedMessage,
-                      decryptSecretFriend
-                    );
+                        let exists =
+                          state.filter(
+                            (current) => current.id === individual.id
+                          )[0] !== undefined;
 
-                    if (decryptedMessageFriend) {
-                      let individual = {
-                        ...decryptedMessageFriend,
-                        encrypted: true,
-                      };
+                        if (!exists) {
+                          setState(
+                            [...state, individual].sort((a, b) => {
+                              if (a.timeSent > b.timeSent) return 1;
+                              if (a.timeSent < b.timeSent) return -1;
+                              return 0;
+                            })
+                          );
 
-                      let exists =
-                        state.filter(
-                          (current) => current.id === individual.id
-                        )[0] !== undefined;
+                          sessionStorage.setItem(
+                            `${chatId}-measages`,
+                            JSON.stringify(state)
+                          );
 
-                      if (!exists) {
-                        setState(
-                          [...state, individual].sort((a, b) => {
-                            if (a.timeSent > b.timeSent) return 1;
-                            if (a.timeSent < b.timeSent) return -1;
-                            return 0;
-                          })
-                        );
-
-                        sessionStorage.setItem(
-                          `${chatId}-measages`,
-                          JSON.stringify(state)
-                        );
-
-                        return scroll();
+                          return scroll();
+                        }
                       }
-                    }
+                    } catch (error) {}
 
                     return;
                   }

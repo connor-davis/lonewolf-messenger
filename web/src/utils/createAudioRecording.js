@@ -1,10 +1,7 @@
 import { SEA } from 'gun/gun';
-import { gun } from 'lonewolf-protocol';
+import { gun, messaging } from 'lonewolf-protocol';
 import moment from 'moment';
-import { SkynetClient } from 'skynet-js';
 import { v4 } from 'uuid';
-
-let client = new SkynetClient('https://siasky.net');
 
 let createAudioRecording = (roomId, publicKey, callback = () => {}) => {
   navigator.mediaDevices.getUserMedia({ audio: true }).then(function (stream) {
@@ -50,22 +47,12 @@ let createAudioRecording = (roomId, publicKey, callback = () => {}) => {
           secret
         );
 
-        var encryptedMessageFile = new Blob([encryptedMessage], {
-          type: 'text/plain;charset=utf-8',
-        });
-
-        const { skylink } = await client.uploadFile(encryptedMessageFile);
+        let upload = await ipfs.add(encryptedMessage);
 
         messaging.sendVoiceMessage(
           roomId,
           publicKey,
-          {
-            path: skylink.split(':')[1],
-            messageId,
-            timeSent,
-            sender: userPub,
-            type: 'voice',
-          },
+          encryptedMessage,
           ({ errMessage, success }) => {
             if (errMessage) return console.log(errMessage);
             else return console.log(success);

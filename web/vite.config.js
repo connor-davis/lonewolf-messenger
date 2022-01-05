@@ -12,14 +12,14 @@ export default defineConfig({
   },
   plugins: [
     nodePolyfills({
-      // include: [
-      //   '*.js',
-      //   'node_modules/**/*.js',
-      //   // (1)
-      //   new RegExp('node_modules/.vite/.*js'),
-      // ],
-      // // (2)
-      // exclude: ['node_modules/polyfill-nodeglobal.js'],
+      include: [
+        '*.js',
+        'node_modules/**/*.js',
+        // (1)
+        new RegExp('node_modules/.vite/.*js'),
+      ],
+      // (2)
+      exclude: ['node_modules/polyfill-nodeglobal.js'],
     }),
     solidPlugin(),
     VitePWA({
@@ -103,6 +103,6 @@ export default defineConfig({
   ],
   build: {
     target: 'esnext',
-    polyfillDynamicImport: false,
+    polyfillDynamicImport: true,
   },
 });
